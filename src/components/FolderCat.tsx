@@ -11,7 +11,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import ImageModal from "../../utils/ImageModal";
 
 const FolderCat = async () => {
-  const categories = await getFolderCategories("743Ub4LqggljSXaAK3hG") as CardData[];
+   const categories = await getFolderCategories("743Ub4LqggljSXaAK3hG") as CardData[];
 console.log(categories)
   return (
     <>

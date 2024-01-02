@@ -9,10 +9,14 @@ import React from "react";
 import FolderBtn from "./FolderBtn";
 import { getAllFolders } from "../../services/card-service";
 import FoldersDropdown from "./FoldersDropdown";
-const FolderActions = async () => {
+import { curFolder } from "../../types";
 
-  const folders = await getAllFolders();
-  console.log(folders);
+interface Folderprops{
+  folders:curFolder
+}
+const FolderActions = async ({folders}:Folderprops) => {
+  // const folders = await getAllFolders();
+  // console.log(folders);
 
   return (
     <div className="  flex justify-between ">

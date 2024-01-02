@@ -5,17 +5,20 @@ import { CiCirclePlus } from "react-icons/ci";
 import ImageModal from "../../utils/ImageModal";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { curFolder } from "../../types";
 
 const AddnewCategory = ({
   
   folder,
+  // foldername
 }: {
   
   folder: boolean;
+  // foldername:(foldername: curFolder) => Promise<curFolder>
 }) => {
   return (
     <Link href={{pathname:'/add-new-category',}}>
-      <div className="">
+      <div className="ml-[20%]">
         <ImageModal
           element={
             <CiCirclePlus className=" mx-auto text-[100px] text-[#852E2C]" />

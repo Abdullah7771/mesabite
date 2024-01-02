@@ -8,22 +8,27 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import localFont from "next/font/local";
 
 const myFont = localFont({ src: "../../public/font/Recoleta-RegularDEMO.otf" });
+// interface searchPROPS{
+//   onSearch: (isSearching:boolean) => void;
+// }
+
 
 const SearchComponent = () => {
+  
   const [icon, setIcon] = useState(true);
 
 //   const { cards, categories, setCards, setCategories, filtered } =
 //     useContext(CardContext);
   const handleChange = (e: any) => {
     setIcon(false);
-
+    
     if (e.target.value) {
-      const filterCards = cards.filter((card) =>
-        card.title.toLowerCase().includes(e.target.value.toLowerCase())
-      );
-      const filterCat = categories.filter((card) =>
-        card.title.toLowerCase().includes(e.target.value.toLowerCase())
-      );
+       // const filterCards = cards.filter((card) =>
+      //   card.title.toLowerCase().includes(e.target.value.toLowerCase())
+      // );
+      // const filterCat = categories.filter((card) =>
+      //   card.title.toLowerCase().includes(e.target.value.toLowerCase())
+      // );
     //   setCards(filterCards);
     //   setCategories(filterCat);
 
@@ -32,6 +37,31 @@ const SearchComponent = () => {
     //   setCategories(filtered[1]);
     }
   };
+
+  // const handleFocus = () => {
+  //   setIsSearching(true);
+  //   onSearch(false)
+  // };
+
+  // const handleBlur = () => {
+  //   setIsSearching(false);
+  //   onSearch(true);
+  // };
+
+ 
+
+  // const handleKeyUp = () => {
+  //   if (inputValue.length > 0) {
+  //     console.log("Key released:", inputValue);
+  //   }
+  // };
+
+  // const handleGoClick = () => {
+  //   console.log("Search form submitted");
+  // };
+
+
+
 
   return (
     <>

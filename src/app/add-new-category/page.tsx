@@ -37,6 +37,8 @@ interface Props {
 }
 
 const NewCategory = ({ folder, folderid }: Props) => {
+  
+  console.log(folder,folderid)
 
   // Get a reference to the storage service, which is used to create references in your storage bucket
   const storage = getStorage();

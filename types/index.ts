@@ -32,7 +32,7 @@ interface CardData {
 
 interface curFolder {
   id: string;
-  folderName: string | any;
+  name: string | any;
 }
 
 interface openPage {

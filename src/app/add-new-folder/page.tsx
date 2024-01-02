@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext, useState, useTransition } from "react";
 
 // import { CardContext } from "@/context/CardContext";
 
@@ -29,7 +29,12 @@ const myFont = localFont({
 const NewFolder = () => {
   const [val, setVal] = useState("");
   const router = useRouter();
-  
+  const [isPending, startTransition] = useTransition();
+  if (isPending) {
+    return (
+      <div>Loading...</div>
+    )
+  }
   // const { setIsOpen, folders, setFolders } = useContext(CardContext);
   const addCategory = async (cat: string) => {
     const folid = await addFolder(cat);
@@ -97,6 +102,12 @@ const NewFolder = () => {
                   // setIsOpen({ page: "home", cardData: cardData });
                   e.preventDefault();
                   router.push('/home');
+                  setTimeout(()=>{
+
+                    router.refresh()
+                  },1000)
+                
+                
                   
                   // setCategory(val);
                   // handleSubmit(); // Call the handleSubmit function

@@ -1,4 +1,4 @@
-import { CardData } from "@/types";
+
 import {
   addDoc,
   collection,
@@ -14,9 +14,12 @@ import {
   ref,
 } from "firebase/storage";
 import { db } from "./firebase-config";
+import { CardData } from "../types";
 
 export const getFolderCategories = async (folderid: string) => {
+
   try {
+    console.log(folderid)
     const storage = getStorage();
 
     const collectionRef = collection(db, "folders");

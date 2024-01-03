@@ -7,7 +7,12 @@ import { ButtonProps, CardData } from "../types";
 import Link from "next/link";
 import { useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { addFolderCategories,updateFolderCategories } from "../services/card-service";
+import {
+  addFolderCategories,
+  updateFolderCategories,
+} from "../services/card-service";
+import { useRouter } from "next/navigation";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
   // const {
@@ -19,7 +24,9 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
   //   categories,
   //   setCategories,
   // } = useContext(CardContext);
-
+  const router = useRouter();
+  console.log(folder);
+  const storage = getStorage();
   const cardData: CardData = {
     title: props.title,
     description: props.description,
@@ -45,7 +52,21 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
       toast.error("Input all details");
       return false;
     }
-    // var ab = await addFolderCategories(cardData, currentFolder.id, folder);
+
+    var ab = await addFolderCategories(
+      cardData,
+      String(props.folderid),
+      folder === "true"
+    );
+    if (ab) {
+      handleSubmit(ab);
+    }
+
+    console.log(ab);
+    setTimeout(() => {
+      router.refresh();
+    }, 1000);
+    router.push("/home");
     // if (ab) cardData.id = ab;
     // console.log(cardData);
 
@@ -70,47 +91,20 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
     // setIsOpen({ page: "home", cardData: cardData });
   };
 
-  // const updateCards = async () => {
-  //   if (!cardData.image || !cardData.title) {
-  //     toast.error("Input img");
-  //     return false;
-  //   }
+  const updateCards = async () => {
+    if (!cardData.image || !cardData.title) {
+      toast.error("Input img");
+      return false;
+    }
+    if (props.folderid)
+      await updateFolderCategories(cardData, props.folderid, folder);
 
-  //   await updateFolderCategories(cardData, currentFolder.id, folder);
-  //   if (folder == false) {
-  //     const a = findInd(cardData, categories);
-  //     if (a !== -1) {
-  //       setCategories((prev) => {
-  //         const updatedCards = [...prev];
-  //         updatedCards[a] = cardData;
-  //         return updatedCards;
-  //       });
-  //       setFiltered((prev) => [[...prev[0]], [...categories]]);
-  //     } else {
-  //       setCategories((prev) => [...prev, cardData]);
-  //       setFiltered((prev) => [[...prev[0]], [...prev[1]]]);
-  //     }
-  //   } else {
-  //     const a = findInd(cardData, cards);
-  //     if (a !== -1) {
-  //       setCards((prev) => {
-  //         const updatedCards = [...prev];
-  //         updatedCards[a] = cardData;
-  //         return updatedCards;
-  //       });
-
-  //       setFiltered((prev) => [[...cards], [...prev[1]]]);
-  //     } else {
-  //       setCards((prev) => [...prev, cardData]);
-  //       setFiltered((prev) => [[...prev[0]], [...prev[1]]]);
-  //     }
-  //   }
-
-  //   console.log(cardData);
-
-  //   setIsOpen({ page: "home", cardData: cardData });
-  //   handleSubmit(cardData.id);
-  // };
+    handleSubmit(cardData.id);
+    setTimeout(() => {
+      router.refresh();
+    }, 1000);
+    router.push("/home");
+  };
 
   return (
     <>
@@ -124,7 +118,9 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
           </button>
         </Link>
         <button
-       
+          onClick={() => {
+            task === "add" ? addCards() : updateCards();
+          }}
           className="bg-[#FFCD00] text-[#852E2C] font-bold w-[150px] h-[50px] mt-2 rounded-full"
         >
           Save

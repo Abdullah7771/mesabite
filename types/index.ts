@@ -19,6 +19,7 @@ interface CardProps {
   imgName: string;
   id: string;
   folder?: boolean;
+  folderid?:string
 }
 interface CardData {
   title: string;
@@ -27,7 +28,7 @@ interface CardData {
   quantity: number;
   imgName: string;
   id: string;
-  category?: string;
+  folderid?: string;
 }
 
 interface curFolder {
@@ -62,7 +63,7 @@ interface ButtonProps {
   id: string;
   imgName: string;
   task: string;
-  folder?: boolean;
+  folder?: boolean | string;
   folderid?: string;
 }
 

@@ -25,7 +25,10 @@ import { CardData, curFolder } from "../../../types";
 
 
 const Page = async () => {
-  // const cat= async function getCurCategories(id:string) {
+
+     var folders = await getAllFolders()
+  //   console.log(folders)
+   //   const cat= async function getCurCategories(id:string) {
   //   'use server'
   //   if(!id){
 
@@ -39,10 +42,9 @@ const Page = async () => {
   //   }
      
   //   // ...
+
+  const id='743Ub4LqggljSXaAK3hG'
   // }
-     var folders = await getAllFolders()
-  //   console.log(folders)
- 
   
   return (
     <>
@@ -50,12 +52,12 @@ const Page = async () => {
       <CreateCatBtn />
       <div className="mx-auto  sm:w-[600px]  w-[350px] lg:w-[800px] mt-5 border-4 rounded-xl border-[#852E2C] p-5">
         <FolderActions folders={folders}  />
-        <FolderCat />
-        <AddnewCategory folder={true}  />
+        <FolderCat id={id} />
+        
       </div>
       <Categories />
 
-      <AddnewCategory folder={false}   />
+      <AddnewCategory folder={false} folderid=""  />
     </>
   );
 };

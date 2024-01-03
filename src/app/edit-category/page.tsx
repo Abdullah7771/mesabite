@@ -1,7 +1,6 @@
 "use client";
-import Buttons from "../../../utils/Buttons";
-import Input from "../../../utils/Input";
 
+// import { CardContext } from "@/context/CardContext";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import {
   faArrowUpFromBracket,
@@ -11,53 +10,69 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Montserrat } from "next/font/google";
 import localFont from "next/font/local";
 import Link from "next/link";
-import React, {
-  LegacyRef,
-  MutableRefObject,
-  useContext,
-  useRef,
-  useState,
-
-} from "react";
-
+import React, { useContext, useEffect, useRef, useState } from "react";
 const inter = Montserrat({ subsets: ["latin"], weight: "600" });
 
-import { cardData } from "../../../mock";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { useRouter } from "next/navigation";
+import { CardData } from "../../../types";
 
-
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
+import Buttons from "../../../utils/Buttons";
+import { getSpecificCategory } from "../../../services/card-service";
 const myFont = localFont({
   src: "../../../public/font/Recoleta-RegularDEMO.otf",
 });
 
 interface Props {
-  folder: boolean | undefined;
-  folderid: string;
+  searchParams?: { id?: string; folderid?: string };
 }
 
-const NewCategory = ({ folder, folderid }: Props) => {
-  
-  console.log(folder,folderid)
+const EditCategory = ({ searchParams }: Props) => {
+  const id = searchParams?.id ?? "";
+  const folderid = searchParams?.folderid ?? "";
+  console.log(id, folderid);
 
+  useEffect(() => {
+    getdata(id, folderid);
+  }, []);
   // Get a reference to the storage service, which is used to create references in your storage bucket
   const storage = getStorage();
 
   // Create a storage reference from our storage service
+  const [name, setName] = useState<any>();
+  const [val, setVal] = useState();
+  const [desc, setDesc] = useState();
+  const[lastImg,setLastImg]=useState<File | null | any>("");
 
-  const [val, setVal] = useState("");
-  const [desc, setDesc] = useState("");
-  const router = useRouter();
-  //   const { setIsOpen } = useContext(CardContext);
-
-  const [img, setImg] = useState<File | null | any>(null);
+  const [img, setImg] = useState<File | null | any>("");
+  const getdata = async (id: string, folderid: string) => {
+    const data: CardData[] = (await getSpecificCategory(
+      id,
+      folderid
+    )) as CardData[];
+    console.log(data);
+    setVal(data[0].title);
+    setDesc(data[0].description);
+    setImg(data[0].image);
+    setLastImg(data[0].image);
+    setName(data[0].imgName)
+    // if (data) setVal(data.title);
+    // setDesc(data.description);
+    // setImg(data.image);
+    // setName(data.imgName);
+  };
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      console.log(e.target.files[0]);
       const imageUrl = e.target.files[0];
       // const storageRef = ref(storage, `images/${imageUrl?.name}`);
       console.log(imageUrl);
+      setName(imageUrl.name);
       setImg(imageUrl);
 
       // try {
@@ -75,26 +90,56 @@ const NewCategory = ({ folder, folderid }: Props) => {
 
   const imgRef = useRef<any>();
 
-  const handleSubmit = async (docid: string | undefined) => {
-    console.log(docid);
-    const storageRef =
-      folder === true
-        ? ref(storage, `images/${folderid}/${docid}`)
-        : ref(storage, `categories/${docid}`);
-    console.log(folder);
+  const handleSubmit = async () => {
+    console.log(img, lastImg);
+    if (img !== lastImg) {
+      try {
+        if (img) {
+          console.log(img);
 
-    try {
-      if (img) {
-        console.log(img);
-        console.log(storageRef);
-        const res = await uploadBytes(storageRef, img);
-        const downloadUrl = await getDownloadURL(storageRef);
-        console.log(downloadUrl);
+          if (folderid===undefined) {
+            const existingFilePath = `categories/${id}`;
+
+            // Create a reference to the existing file
+            const existingFileRef = ref(storage, existingFilePath);
+
+            // Delete the existing file
+            await deleteObject(existingFileRef);
+            const newFilePath = `categories/${id}`; // Specify the path for the new file
+            const newFileRef = ref(storage, newFilePath);
+
+            // Upload the new file
+            const result = await uploadBytes(newFileRef, img);
+
+            // Get the download URL for the new file
+            const newDownloadUrl = await getDownloadURL(newFileRef);
+          } else {
+            const existingFilePath = `images/${folderid}/${id}`;
+
+            const existingFileRef = ref(storage, existingFilePath);
+
+            await deleteObject(existingFileRef);
+
+            const newFilePath = `images/${folderid}/${id}`; // Specify the path for the new file
+            const newFileRef = ref(storage, newFilePath);
+
+            const result = await uploadBytes(newFileRef, img);
+
+            const newDownloadUrl = await getDownloadURL(newFileRef);
+
+            console.log(newDownloadUrl);
+          }
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+    
+      setImg(img);
+      setName(name);
     }
   };
+
   const focusInput = () => {
     imgRef.current.click();
   };
@@ -105,17 +150,14 @@ const NewCategory = ({ folder, folderid }: Props) => {
         <div className=" mx-auto text-center p-5 lg:p-0 sm:w-[380px] md:w-[450px] lg:w-[500px] w-[350px]  text-[#852E2C]">
           <div className="flex justify-between p-4">
             <p className={`font-extrabold text-xl ${myFont.className} `}>
-              Add New Category
+              Edit Category
             </p>
             <Link href="/home">
               <FontAwesomeIcon
                 icon={faXmark}
                 className="cursor-pointer "
                 size="xl"
-               
-                
-                  //   setIsOpen({ page: "home", cardData: cardData });
-               
+                onClick={(e) => {}}
               />
             </Link>
           </div>
@@ -127,29 +169,27 @@ const NewCategory = ({ folder, folderid }: Props) => {
             </p>
 
             {img ? (
-              <>
-                <div
-                  className={` bg-no-repeat bg-contain mt-2 h-[253px]  mx-auto sm:w-full sm:h-[253px] md:w-[378px] md:h-[308px] lg:w-[361px] lg:h-[295px]  w-full `}
-                  style={{
-                    backgroundImage: `url(/${
-                      img ? img.name : "/imgshape2.png"
-                    })`,
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    className="cursor-pointer float-right bg-gray-800 "
-                    size="xl"
-                    color="white"
-                    onClick={() => setImg(null)}
-                  />
-                </div>
-              </>
+              <div
+                className={`bg-no-repeat bg-contain mt-2 h-[253px]  mx-auto sm:w-full sm:h-[253px] md:w-[378px] md:h-[308px] lg:w-[361px] lg:h-[295px]  w-full  `}
+                style={{
+                  backgroundImage: `url(${
+                    img.name ? img.name : img ? img : "/imgshape2.png"
+                  })`,
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  className="cursor-pointer float-right bg-gray-800 "
+                  size="xl"
+                  color="white"
+                  onClick={() => setImg(null)}
+                />
+              </div>
             ) : (
               <div
                 className={`h-[253px] mx-auto  sm:w-[320px] sm:h-[260px]  md:w-[378px] md:h-[308px] lg:w-[361px] lg:h-[295px]  w-full flex justify-center items-center bg-no-repeat bg-cover`}
                 style={{
-                  backgroundImage: `url(${img ? img.name : "/imgshape2.png"})`,
+                  backgroundImage: `url(${img ? img : "/imgshape2.png"})`,
                 }}
               >
                 <div
@@ -187,11 +227,18 @@ const NewCategory = ({ folder, folderid }: Props) => {
           </div>
 
           <div className="mt-4 ">
-            <Input
-              val={setVal}
-              name="Name"
-              styles="bg-[url('/inputshape2.png')]  lg:w-[350px] lg:h-[40px]  md:w-[368px] md:h-[52px]    sm:w-[320px] ]      w-full  bg-contain bg-no-repeat p-2"
-            />
+            <div>
+              <p className={`text-base ml-2 font-semibold ${inter.className}`}>
+                Name
+              </p>
+              <input
+                type={"text"}
+                value={val}
+                className={`w-full   bg-[#FFF6DF] mt-2 outline-none bg-[url('/inputshape2.png')]  lg:w-[350px] lg:h-[40px]  md:w-[368px] md:h-[52px]    sm:w-[320px] ] bg-contain bg-no-repeat p-2`}
+                onChange={(e) => setVal(e.target.value)}
+              />
+              <p className="text-end text-xs lg:pr-5 mt-[-2%]">0/50</p>
+            </div>
 
             <p className={`mt-5 ml-2 ${inter.className}`}>
               {" "}
@@ -214,15 +261,15 @@ const NewCategory = ({ folder, folderid }: Props) => {
           <hr className="mt-4 " />
           <div className="lg:pl-[5%]">
             <Buttons
-              task="add"
-              imgName={img?.name}
-              id={""}
-              title={val}
-              description={desc}
+              imgName={name}
+              id={id}
+              title={val? val :''}
+              description={desc ? desc : ""}
               quantity={0}
-              image={img?.name}
+              image={img===lastImg ? img : name}
               handleSubmit={handleSubmit}
-              folder={folder}
+              task="edit"
+              folder={folderid=="undefined"? false : true}
               folderid={folderid}
             />
           </div>
@@ -232,4 +279,4 @@ const NewCategory = ({ folder, folderid }: Props) => {
   );
 };
 
-export default NewCategory;
+export default EditCategory;

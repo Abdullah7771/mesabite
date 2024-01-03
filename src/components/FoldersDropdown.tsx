@@ -1,9 +1,10 @@
 "use client";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { getFolderCategories } from "../../services/card-service";
+import { revalidatePath } from "next/cache";
 
 const FoldersDropdown = ({
   folders,
@@ -11,6 +12,8 @@ const FoldersDropdown = ({
   folders: { id: string; name: string };
 }) => {
   const router = useRouter();
+  const searchParams = useSearchParams()
+
   const [dropdpown, setDropdown] = useState(false);
   const handleClick = () => {
     setDropdown(!dropdpown);
@@ -20,6 +23,7 @@ const FoldersDropdown = ({
     try {
       setVal(value);
       console.log(key)
+      createQueryString(key,value)
       // await getFolderCategories(key);
       setDropdown(false);
     } catch (error) {
@@ -33,6 +37,12 @@ const FoldersDropdown = ({
   // },[])
   const [firstFolderId, firstFolderName] = Object.entries<string>(folders)[0];
   const [val, setVal] = useState(firstFolderName);
+  const createQueryString = (key: string, value: number | string) => {
+    const params = new URLSearchParams(searchParams)
+    params.set(key, String(value))
+console.log(params)
+    return String(params)
+  }
 
   return (
     <>

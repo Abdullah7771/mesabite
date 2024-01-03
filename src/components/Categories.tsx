@@ -17,7 +17,7 @@ const Categories = async() => {
               image={card.image}
               imgName={card.imgName}
               id={card.id}
-              folder={true}
+              folder={false}
             />
           ))}
 

@@ -1,9 +1,9 @@
-
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   updateDoc,
 } from "firebase/firestore";
@@ -16,10 +16,66 @@ import {
 import { db } from "./firebase-config";
 import { CardData } from "../types";
 
-export const getFolderCategories = async (folderid: string) => {
-
+export const getSpecificCategory = async (id: string, folderid: string) => {
   try {
-    console.log(folderid)
+    console.log(folderid);
+    const storage = getStorage();
+
+    const data: CardData[] = [];
+    if (folderid=="undefined") {
+      console.log('asd')
+      const collectionRef = collection(db, "categories"); // Reference to the "folders" collection
+
+      // const querySnapshot =  getDoc(collectionRef,id);
+
+      const specific_doc = await getDoc(doc(collectionRef, id));
+      const imgRef = ref(storage, `categories/${specific_doc.id}`);
+      // console.log(imgRef)
+      const downloadUrl = await getDownloadURL(imgRef);
+      var cardData: CardData = {
+        title: specific_doc.data()?.title,
+        image: downloadUrl,
+        description: specific_doc.data()?.description,
+        quantity: specific_doc.data()?.quantity,
+        imgName: specific_doc.data()?.imgName,
+        id: specific_doc.id,
+        folderid: specific_doc.ref.parent.id,
+      };
+      data.push(cardData);
+      console.log(data)
+      return data;
+    }
+    console.log('s')
+    const collectionRef = collection(db, "folders");
+    const getFolder = doc(collectionRef, folderid);
+
+    const nestedCollectionRef = collection(getFolder, "categories");
+    const specific_doc = await getDoc(doc(nestedCollectionRef, id));
+    const imgRef = ref(storage, `images/${folderid}/${specific_doc.id}`);
+    // console.log(imgRef)
+    const downloadUrl = await getDownloadURL(imgRef);
+    var cardData: CardData = {
+      title: specific_doc.data()?.title,
+      image: downloadUrl,
+      description: specific_doc.data()?.description,
+      quantity: specific_doc.data()?.quantity,
+      imgName: specific_doc.data()?.imgName,
+      id: specific_doc.id,
+      folderid: specific_doc.ref.parent.id,
+    };
+
+    data.push(cardData);
+    console.log(data)
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getFolderCategories = async (folderid: string) => {
+  try {
+    console.log(folderid);
     const storage = getStorage();
 
     const collectionRef = collection(db, "folders");
@@ -42,7 +98,7 @@ export const getFolderCategories = async (folderid: string) => {
           quantity: doc.data().quantity,
           imgName: doc.data().imgName,
           id: doc.id,
-          category: doc.ref.parent.id,
+          folderid: doc.ref.parent.id,
         };
 
         data.push(cardData);
@@ -76,7 +132,7 @@ export const getCategories = async (): Promise<CardData[]> => {
           quantity: doc.data().quantity,
           imgName: doc.data().imgName,
           id: doc.id,
-          category: doc.ref.parent.id,
+          folderid: doc.ref.parent.id,
         };
 
         data.push(cardData);
@@ -117,6 +173,7 @@ export const addFolderCategories = async (
     imgName,
   };
   console.log(sendData);
+  console.log(folder);
 
   try {
     if (folder == false) {
@@ -130,6 +187,9 @@ export const addFolderCategories = async (
 
     const nestedCollectionRef = collection(getFolder, "categories");
     const addCat = await addDoc(nestedCollectionRef, sendData);
+    await updateDoc(addCat, {
+      id: addCat.id,
+    });
     return addCat.id;
   } catch (e) {
     console.error("Error adding document: ", e);
@@ -145,7 +205,7 @@ export const addFolder = async (value: string) => {
 export const updateFolderCategories = async (
   data: CardData,
   folderid: string,
-  folder?: boolean
+  folder?: boolean | string
 ): Promise<string> => {
   console.log(data);
   const { title, description, quantity, imgName, id } = data;

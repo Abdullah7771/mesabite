@@ -1,13 +1,15 @@
+"use client"
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { faGear, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext } from "react";
 
-
 import { StorageReference } from "firebase/storage";
 import { Montserrat } from "next/font/google";
 import { CardData, CardProps } from "../../types";
 import CardBtn from "./CardBtn";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const inter = Montserrat({ subsets: ["latin"], weight: "500" });
 
@@ -18,9 +20,8 @@ const Card = ({
   imgName,
   id,
   folder,
+  folderid
 }: CardProps) => {
-
-
   const cardData: CardData = {
     title,
     description,
@@ -28,8 +29,17 @@ const Card = ({
     imgName,
     image,
     id,
+    folderid
   };
-;
+
+  const searchParams = useSearchParams()
+  const createQueryString = (key: string, value: number | string) => {
+    const params = new URLSearchParams(searchParams)
+    params.set(key,String(value))
+console.log(params)
+    return String(params)
+
+  }
   return (
     <>
       <div className="mt-5  ">
@@ -47,8 +57,25 @@ const Card = ({
                     5 ITEMS
                   </p>
                 </div>
-               
-               <CardBtn/>
+
+                <div className=" flex flex-row md:gap-5   gap-2 px-2 text-white cursor-pointer ">
+                  <FontAwesomeIcon
+                    icon={faGear}
+                    className="md:h-6 h-3 bg-white  text-[#852E2C] rounded-full p-2"
+                    onClick={()=>console.log(folder)}
+                  />
+               <Link href={"/edit-category"+"?"+createQueryString("id", id) + "&" +createQueryString('folderid',String(folderid))}>
+                    <FontAwesomeIcon
+                      icon={faPen}
+                      className="md:h-6 h-3 bg-white text-[#852E2C] rounded-full p-2"
+                      
+                    />
+                  </Link>
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    className="md:h-6 h-3 bg-white text-[#852E2C] rounded-full p-2"
+                  />
+                </div>
               </div>
 
               <p

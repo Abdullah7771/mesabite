@@ -1,5 +1,6 @@
-import { CardData, curFolder } from "@/types";
-export { cardData, a };
+import { CardData } from "../types";
+
+export { cardData};
 const cardData: CardData = {
   title: "",
   description: "",
@@ -7,10 +8,7 @@ const cardData: CardData = {
   image: "",
   id: "",
   imgName: "",
-  category: "",
+
 };
 
-const a: curFolder = {
-  id: "",
-  folderName: "",
-};
+

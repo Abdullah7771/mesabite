@@ -1,27 +1,22 @@
 "use client";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { CiCirclePlus } from "react-icons/ci";
 import ImageModal from "../../utils/ImageModal";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { curFolder } from "../../types";
 
 const AddnewCategory = ({
   folder,
   folderid,
-}: // foldername
-{
+}: {
   folder: boolean;
   folderid: string;
-  // foldername:(foldername: curFolder) => Promise<curFolder>
 }) => {
   const searchParams = useSearchParams();
 
   const createQueryString = (key: string, value: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set(key, String(value));
-    // console.log(params);
     return String(params);
   };
   const search = String(searchParams.get("folderid"));

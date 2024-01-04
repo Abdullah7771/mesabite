@@ -7,7 +7,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
-import FolderBtn from "./FolderBtn";
 import { deleteFolder, getAllFolders } from "../../services/card-service";
 import FoldersDropdown from "./FoldersDropdown";
 import { curFolder } from "../../types";

@@ -2,16 +2,12 @@
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { faGear, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useContext } from "react";
 
-import { StorageReference } from "firebase/storage";
 import { Montserrat } from "next/font/google";
-import { CardData, CardProps } from "../../types";
-import CardBtn from "./CardBtn";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { delCategories } from "../../services/card-service";
-import { useRouter } from "next/navigation";
+import { CardData, CardProps } from "../../types";
 
 const inter = Montserrat({ subsets: ["latin"], weight: "500" });
 

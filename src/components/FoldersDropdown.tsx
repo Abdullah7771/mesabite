@@ -2,12 +2,10 @@
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  getFolderCategories,
-  getFolderName,
+  getFolderName
 } from "../../services/card-service";
-import { revalidatePath } from "next/cache";
 
 const FoldersDropdown = ({
   folders,

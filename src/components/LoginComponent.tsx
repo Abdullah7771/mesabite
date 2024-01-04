@@ -1,14 +1,12 @@
 "use client";
-import { createUser, googleSignin, signIn } from "../../services/firebase-auth";
-import Input from "../../utils/Input";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { UserCredential } from "firebase/auth";
-import { Loading } from "../../utils/loading"
+import { googleSignin, signIn } from "../../services/firebase-auth";
+import Input from "../../utils/Input";
 
 
 const LoginComponent = () => {
@@ -16,11 +14,6 @@ const LoginComponent = () => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(true);
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 1000);
-  // }, []);
 
  
   const handleGoogleSignin = async () => {

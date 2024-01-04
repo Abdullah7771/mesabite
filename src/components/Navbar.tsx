@@ -1,5 +1,4 @@
 "use client";
-import { signOutUser } from "../../services/firebase-auth";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { faAngleDown, faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +6,7 @@ import { CookieValueTypes, deleteCookie, getCookie } from "cookies-next";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { signOutUser } from "../../services/firebase-auth";
 interface Props {
   email: CookieValueTypes;
 }

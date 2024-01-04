@@ -2,8 +2,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 
-import { ImageModalProps } from "@/types";
 import { Montserrat } from "next/font/google";
+import { ImageModalProps } from "../types";
 const inter = Montserrat({ subsets: ["latin"] });
 
 

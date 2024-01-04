@@ -12,18 +12,6 @@ import {
 } from "../../../services/card-service";
 import { CardData, curFolder } from "../../../types";
 
-// const onSearch = async (isSearching=false) => {
-//   "use server";
-//   let isTrue=true;
-
-//   // if(isTrue){
-//   //   isTrue=false
-//   // }
-//   // else{
-//   //   isTrue=true
-//   // }
-//   console.log('mads')
-// };
 interface Props {
   searchParams?: { folderid?: string };
 }
@@ -35,20 +23,14 @@ const Page = async ({ searchParams }: Props) => {
   const folderid = searchParams?.folderid
     ? searchParams?.folderid
     : firstFolderId;
-  //   const cat= async function getCurCategories(id:string) {
-  //   'use server'
-  //   if(!id){
-  // const categories = await getFolderCategories(folderid) as CardData[];
 
-  //     return categories as CardData[]
-  //   }
-  //   else{
-
-  //     const categories = await getFolderCategories(id) as CardData[];
-  //     return categories as CardData[]
-  //   }
-
-  //   // ...
+  // const [cards, setCards] = useState<CardData[]>([]);
+  // const [categories, setCategories] = useState<CardData[]>([]);
+  // const contextValue: CardContextProps = {
+  //   setCards,
+  //   cards,
+  //   setCategories,
+  //   categories,
 
   // const id='743Ub4LqggljSXaAK3hG'
   // }

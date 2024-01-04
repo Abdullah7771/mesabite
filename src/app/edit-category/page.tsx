@@ -24,17 +24,18 @@ import {
 } from "firebase/storage";
 import Buttons from "../../../utils/Buttons";
 import { getSpecificCategory } from "../../../services/card-service";
+import { useSearchParams } from "next/navigation";
 const myFont = localFont({
   src: "../../../public/font/Recoleta-RegularDEMO.otf",
 });
 
-interface Props {
-  searchParams?: { id?: string; folderid?: string };
-}
+const EditCategory = () => {
+  const searchParams = useSearchParams();
 
-const EditCategory = ({ searchParams }: Props) => {
-  const id = searchParams?.id ?? "";
-  const folderid = searchParams?.folderid ?? "";
+  const id = String(searchParams.get("id"));
+  const folderid =searchParams.get("folderid")
+    ? String(searchParams.get("folderid"))
+    : "743Ub4LqggljSXaAK3hG";
   console.log(id, folderid);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const EditCategory = ({ searchParams }: Props) => {
   const [name, setName] = useState<any>();
   const [val, setVal] = useState();
   const [desc, setDesc] = useState();
-  const[lastImg,setLastImg]=useState<File | null | any>("");
+  const [lastImg, setLastImg] = useState<File | null | any>("");
 
   const [img, setImg] = useState<File | null | any>("");
   const getdata = async (id: string, folderid: string) => {
@@ -60,7 +61,7 @@ const EditCategory = ({ searchParams }: Props) => {
     setDesc(data[0].description);
     setImg(data[0].image);
     setLastImg(data[0].image);
-    setName(data[0].imgName)
+    setName(data[0].imgName);
     // if (data) setVal(data.title);
     // setDesc(data.description);
     // setImg(data.image);
@@ -97,7 +98,7 @@ const EditCategory = ({ searchParams }: Props) => {
         if (img) {
           console.log(img);
 
-          if (folderid===undefined) {
+          if (folderid === undefined) {
             const existingFilePath = `categories/${id}`;
 
             // Create a reference to the existing file
@@ -134,7 +135,6 @@ const EditCategory = ({ searchParams }: Props) => {
         console.log(error);
       }
     } else {
-    
       setImg(img);
       setName(name);
     }
@@ -263,13 +263,13 @@ const EditCategory = ({ searchParams }: Props) => {
             <Buttons
               imgName={name}
               id={id}
-              title={val? val :''}
+              title={val ? val : ""}
               description={desc ? desc : ""}
               quantity={0}
-              image={img===lastImg ? img : name}
+              image={img === lastImg ? img : name}
               handleSubmit={handleSubmit}
               task="edit"
-              folder={folderid=="undefined"? false : true}
+              folder={folderid == "undefined" ? false : true}
               folderid={folderid}
             />
           </div>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { faGear, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +10,8 @@ import { CardData, CardProps } from "../../types";
 import CardBtn from "./CardBtn";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { delCategories } from "../../services/card-service";
+import { useRouter } from "next/navigation";
 
 const inter = Montserrat({ subsets: ["latin"], weight: "500" });
 
@@ -20,7 +22,8 @@ const Card = ({
   imgName,
   id,
   folder,
-  folderid
+  folderid,
+ 
 }: CardProps) => {
   const cardData: CardData = {
     title,
@@ -29,17 +32,27 @@ const Card = ({
     imgName,
     image,
     id,
-    folderid
+    folderid,
+  };
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const search = String(searchParams.get("folderid"));
+  const createQueryString = (key: string, value: number | string) => {
+    const params = new URLSearchParams(searchParams);
+
+    params.set(key, String(value));
+    return String(params);
   };
 
-  const searchParams = useSearchParams()
-  const createQueryString = (key: string, value: number | string) => {
-    const params = new URLSearchParams(searchParams)
-    params.set(key,String(value))
-console.log(params)
-    return String(params)
+  const query = search
+    ? "/edit-category" + "?" + createQueryString("id", id)
+    : "/edit-category" +
+      "?" +
+      createQueryString("id", id) +
+      "&" +
+      createQueryString("folderid", String(folderid));
 
-  }
   return (
     <>
       <div className="mt-5  ">
@@ -62,18 +75,23 @@ console.log(params)
                   <FontAwesomeIcon
                     icon={faGear}
                     className="md:h-6 h-3 bg-white  text-[#852E2C] rounded-full p-2"
-                    onClick={()=>console.log(folder)}
+                    onClick={() => console.log(folder)}
                   />
-               <Link href={"/edit-category"+"?"+createQueryString("id", id) + "&" +createQueryString('folderid',String(folderid))}>
+                  <Link href={query}>
                     <FontAwesomeIcon
                       icon={faPen}
                       className="md:h-6 h-3 bg-white text-[#852E2C] rounded-full p-2"
-                      
                     />
                   </Link>
                   <FontAwesomeIcon
                     icon={faTrash}
                     className="md:h-6 h-3 bg-white text-[#852E2C] rounded-full p-2"
+                    onClick={() => {
+                      delCategories(id, folder, folderid);
+                      setTimeout(() => {
+                        router.refresh();
+                      }, 1000);
+                    }}
                   />
                 </div>
               </div>

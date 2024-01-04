@@ -162,7 +162,7 @@ export const getAllFolders = async () => {
 export const addFolderCategories = async (
   data: CardData,
   folderid: string,
-  folder?: boolean
+  folder?: boolean | string
 ) => {
   const { title, description, quantity, imgName } = data;
 

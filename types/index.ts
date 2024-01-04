@@ -19,7 +19,7 @@ interface CardProps {
   imgName: string;
   id: string;
   folder?: boolean;
-  folderid?:string
+  folderid?: string;
 }
 interface CardData {
   title: string;

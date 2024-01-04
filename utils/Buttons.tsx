@@ -56,7 +56,7 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
     var ab = await addFolderCategories(
       cardData,
       String(props.folderid),
-      folder === "true"
+      folder
     );
     if (ab) {
       handleSubmit(ab);
@@ -67,6 +67,8 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
       router.refresh();
     }, 1000);
     router.push("/home");
+
+   
     // if (ab) cardData.id = ab;
     // console.log(cardData);
 

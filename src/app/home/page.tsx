@@ -10,6 +10,7 @@ import React from "react";
 import { getAllFolders, getFolderCategories } from "../../../services/card-service";
 import { CardData, curFolder } from "../../../types";
 
+
 // const onSearch = async (isSearching=false) => {
 //   "use server";
 //   let isTrue=true;
@@ -22,17 +23,23 @@ import { CardData, curFolder } from "../../../types";
 //   // }
 //   console.log('mads')
 // };
+interface Props {
+  searchParams?: { folderid?: string };
+}
 
 
-const Page = async () => {
+const Page = async ({searchParams}:Props) => {
 
-     var folders = await getAllFolders()
+  var folders = await getAllFolders()
+  const [firstFolderId, firstFolderName] = Object.entries<string>(folders)[0];
   //   console.log(folders)
+  const folderid = searchParams?.folderid ? searchParams?.folderid : firstFolderId;
    //   const cat= async function getCurCategories(id:string) {
   //   'use server'
   //   if(!id){
+    const categories = await getFolderCategories(folderid) as CardData[];
 
-  //     const categories = await getFolderCategories('743Ub4LqggljSXaAK3hG') as CardData[];
+
   //     return categories as CardData[]
   //   }
   //   else{
@@ -43,7 +50,7 @@ const Page = async () => {
      
   //   // ...
 
-  const id='743Ub4LqggljSXaAK3hG'
+  // const id='743Ub4LqggljSXaAK3hG'
   // }
   
   return (
@@ -52,7 +59,7 @@ const Page = async () => {
       <CreateCatBtn />
       <div className="mx-auto  sm:w-[600px]  w-[350px] lg:w-[800px] mt-5 border-4 rounded-xl border-[#852E2C] p-5">
         <FolderActions folders={folders}  />
-        <FolderCat id={id} />
+        <FolderCat id={folderid} />
         
       </div>
       <Categories />

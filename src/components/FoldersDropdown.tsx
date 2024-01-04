@@ -12,18 +12,22 @@ const FoldersDropdown = ({
   folders: { id: string; name: string };
 }) => {
   const router = useRouter();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
   const [dropdpown, setDropdown] = useState(false);
   const handleClick = () => {
     setDropdown(!dropdpown);
   };
 
-  const handleFolderChange = async (value: string,key:string) => {
+  const handleFolderChange = async (key: string, value: string) => {
     try {
-      setVal(value);
-      console.log(key)
-      createQueryString(key,value)
+      
+      console.log(key);
+
+      router.push("/home" + "?" + createQueryString(key, value));
+      setTimeout(() => {
+        router.refresh();
+      }, 1000);
       // await getFolderCategories(key);
       setDropdown(false);
     } catch (error) {
@@ -38,11 +42,11 @@ const FoldersDropdown = ({
   const [firstFolderId, firstFolderName] = Object.entries<string>(folders)[0];
   const [val, setVal] = useState(firstFolderName);
   const createQueryString = (key: string, value: number | string) => {
-    const params = new URLSearchParams(searchParams)
-    params.set(key, String(value))
-console.log(params)
-    return String(params)
-  }
+    const params = new URLSearchParams(searchParams);
+    params.set(key, String(value));
+    console.log(params);
+    return String(params);
+  };
 
   return (
     <>
@@ -62,7 +66,9 @@ console.log(params)
                   <li
                     key={key}
                     className="hover:bg-blue-700 p-2 cursor-pointer"
-                    onClick={()=>handleFolderChange(value,key)}
+                    onClick={() => {
+                      setVal(value)
+                      handleFolderChange("folderid", key)}}
                   >
                     {value}
                   </li>

@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 // import { CardContext } from "@/context/CardContext";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import localFont from "next/font/local";
+import { filterCategories, filterFolderCategories } from "../../services/card-service";
 
 const myFont = localFont({ src: "../../public/font/Recoleta-RegularDEMO.otf" });
 // interface searchPROPS{
@@ -13,16 +14,19 @@ const myFont = localFont({ src: "../../public/font/Recoleta-RegularDEMO.otf" });
 // }
 
 
-const SearchComponent = () => {
-  
+const SearchComponent = ({id}:{id:string}) => {
+  let timeout :any= null;
   const [icon, setIcon] = useState(true);
-
+ const [val, setVal] = useState('')
 //   const { cards, categories, setCards, setCategories, filtered } =
 //     useContext(CardContext);
   const handleChange = (e: any) => {
     setIcon(false);
     
     if (e.target.value) {
+      setVal(e.target.value)
+     
+
        // const filterCards = cards.filter((card) =>
       //   card.title.toLowerCase().includes(e.target.value.toLowerCase())
       // );
@@ -56,9 +60,18 @@ const SearchComponent = () => {
   //   }
   // };
 
-  // const handleGoClick = () => {
-  //   console.log("Search form submitted");
-  // };
+  const getFilterCat = (e:any) => {
+    clearTimeout(timeout);
+
+    // Make a new timeout set to go off in 1000ms (1 second)
+    timeout = setTimeout(function () {
+        console.log('Input Value:', e.target.value);
+
+    }, 1500);
+    console.log("Search form submitted");
+    const filterFod=filterFolderCategories(id,e.target.value);
+    const filterCat=filterCategories(e.target.value);
+  };
 
 
 
@@ -87,6 +100,7 @@ const SearchComponent = () => {
               type="text"
               name=""
               id=""
+              onKeyUp={getFilterCat}
               onChange={handleChange}
               className=" w-full  text-center outline-none border-none   placeholder:text-[#852E2C] "
               placeholder="SEARCH MENU"

@@ -21,7 +21,7 @@ const AddnewCategory = ({
   const createQueryString = (key: string, value: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set(key, String(value));
-    console.log(params);
+    // console.log(params);
     return String(params);
   };
   const search = String(searchParams.get("folderid"));

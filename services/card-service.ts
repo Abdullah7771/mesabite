@@ -5,7 +5,9 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import {
   deleteObject,
@@ -241,6 +243,50 @@ export const updateFolderCategories = async (
   }
   return "";
 };
+export const filterFolderCategories = async (
+  folderid: string,
+  title: string
+) => {
+  const foldersCollectionRef = collection(db, "folders");
+
+  // Reference to a specific document within the "folders" collection
+  const specificFolderDocRef = doc(foldersCollectionRef, folderid);
+
+  // Reference to the "categories" collection within the specific document
+  const categoriesCollectionRef = collection(
+    specificFolderDocRef,
+    "categories"
+  );
+
+  // Query to get documents where "title" equals the specified title
+  const q = query(
+    categoriesCollectionRef,
+    where("title", ">=", title),
+    where("title", "<=", title + "\uf8ff")
+  );
+
+  // Get the query snapshot
+  const querySnapshot = await getDocs(q);
+
+  // Iterate through the documents
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+  });
+};
+
+export const filterCategories = async (title: string) => {
+  const q = query(
+    collection(db, "categories"),
+    where("title", ">=", title),
+    where("title", "<=", title + "\uf8ff")
+  );
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, " => ", doc.data());
+  });
+};
 
 export const delCategories = async (
   id: string,
@@ -297,9 +343,9 @@ export const editFolder = async (folderid: string, value: string) => {
 export const getFolderName = async (folderid: string) => {
   const collectionRef = collection(db, "folders"); // Reference to the "folders" collection
   // const docRef = doc(collectionRef, folderid);
-   const d=await getDoc(doc(collectionRef,folderid));
- 
-   return d.data()?.name
+  const d = await getDoc(doc(collectionRef, folderid));
+
+  return d.data()?.name;
   // await updateDoc(docRef, {
   //   name: value,
   // });

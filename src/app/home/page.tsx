@@ -55,7 +55,7 @@ const Page = async ({ searchParams }: Props) => {
 
   return (
     <>
-      <SearchComponent />
+      <SearchComponent id={folderid} />
       <CreateCatBtn />
       <div className="mx-auto  sm:w-[600px]  w-[350px] lg:w-[800px] mt-5 border-4 rounded-xl border-[#852E2C] p-5">
         <FolderActions folders={folders} />

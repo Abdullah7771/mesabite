@@ -80,7 +80,7 @@ const search=searchParams.get("folderid");
     console.log(docid);
     const storageRef =
       folder === 'true'
-        ? ref(storage, `images/${key}/${docid}`)
+        ? ref(storage, `images/${folderid}/${docid}`)
         : ref(storage, `categories/${docid}`);
     console.log(folder);
 

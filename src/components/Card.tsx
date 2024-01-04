@@ -19,7 +19,6 @@ const Card = ({
   id,
   folder,
   folderid,
- 
 }: CardProps) => {
   const cardData: CardData = {
     title,
@@ -40,14 +39,9 @@ const Card = ({
     params.set(key, String(value));
     return String(params);
   };
+  const query2 = `/edit-category?id=${id}&folderid=${folderid}`;
 
-  const query = search
-    ? "/edit-category" + "?" + createQueryString("id", id)
-    : "/edit-category" +
-      "?" +
-      createQueryString("id", id) +
-      "&" +
-      createQueryString("folderid", String(folderid));
+  const query = `/edit-category?id=${id}`;
 
   return (
     <>
@@ -73,12 +67,20 @@ const Card = ({
                     className="md:h-6 h-3 bg-white  text-[#852E2C] rounded-full p-2"
                     onClick={() => console.log(folder)}
                   />
-                  <Link href={query}>
-                    <FontAwesomeIcon
-                      icon={faPen}
-                      className="md:h-6 h-3 bg-white text-[#852E2C] rounded-full p-2"
-                    />
-                  </Link>
+
+                  <FontAwesomeIcon
+                    icon={faPen}
+                    className="md:h-6 h-3 bg-white text-[#852E2C] rounded-full p-2"
+                    onClick={() => {
+                      folder
+                        ? router.push(query2)
+                        : router.push(query, {
+                            query: "/",
+                          });
+                      console.log(folder);
+                    }}
+                  />
+
                   <FontAwesomeIcon
                     icon={faTrash}
                     className="md:h-6 h-3 bg-white text-[#852E2C] rounded-full p-2"

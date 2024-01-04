@@ -24,7 +24,7 @@ export const getSpecificCategory = async (id: string, folderid: string) => {
     const storage = getStorage();
 
     const data: CardData[] = [];
-    if (folderid == "undefined") {
+    if (folderid == "undefined" || folderid=="null") {
       console.log("asd");
       const collectionRef = collection(db, "categories"); // Reference to the "folders" collection
 

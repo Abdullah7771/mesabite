@@ -97,7 +97,7 @@ const EditCategory = () => {
         if (img) {
           console.log(img);
 
-          if (folderid === undefined) {
+          if (folderid == 'null') {
             const existingFilePath = `categories/${id}`;
 
             // Create a reference to the existing file
@@ -268,7 +268,7 @@ const EditCategory = () => {
               image={img === lastImg ? img : name}
               handleSubmit={handleSubmit}
               task="edit"
-              folder={folderid == "undefined" ? false : true}
+              folder={folderid !='null' }
               folderid={folderid}
             />
           </div>

@@ -24,24 +24,22 @@ const inter = Montserrat({ subsets: ["latin"], weight: "600" });
 
 import { cardData } from "../../../mock";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 
 const myFont = localFont({
   src: "../../../public/font/Recoleta-RegularDEMO.otf",
 });
 
-interface Props {
 
-  searchParams?: { key?: string ,folder?:string}
-}
-
-const NewCategory = ({ searchParams }: Props) => {
+const NewCategory = () => {
 
 
-  const key = searchParams?.key ?? ''
-  const folder = searchParams?.folder ?? ''
-  console.log(key,folder)
+  const searchParams = useSearchParams();
+const search=searchParams.get("folderid");
+  const folderid = search ? String(search) : ''
+  const folder = searchParams.get("folder")
+
 
   // Get a reference to the storage service, which is used to create references in your storage bucket
   const storage = getStorage();
@@ -226,7 +224,7 @@ const NewCategory = ({ searchParams }: Props) => {
               image={img?.name}
               handleSubmit={handleSubmit}
               folder={folder==='true'}
-              folderid={key}
+              folderid={folderid}
             />
           </div>
         </div>

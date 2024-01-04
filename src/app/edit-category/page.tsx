@@ -33,9 +33,8 @@ const EditCategory = () => {
   const searchParams = useSearchParams();
 
   const id = String(searchParams.get("id"));
-  const folderid =searchParams.get("folderid")
-    ? String(searchParams.get("folderid"))
-    : "743Ub4LqggljSXaAK3hG";
+  const folderid =String(searchParams.get("folderid"))
+
   console.log(id, folderid);
 
   useEffect(() => {

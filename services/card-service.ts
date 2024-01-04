@@ -22,8 +22,8 @@ export const getSpecificCategory = async (id: string, folderid: string) => {
     const storage = getStorage();
 
     const data: CardData[] = [];
-    if (folderid=="undefined") {
-      console.log('asd')
+    if (folderid == "undefined") {
+      console.log("asd");
       const collectionRef = collection(db, "categories"); // Reference to the "folders" collection
 
       // const querySnapshot =  getDoc(collectionRef,id);
@@ -42,10 +42,10 @@ export const getSpecificCategory = async (id: string, folderid: string) => {
         folderid: specific_doc.ref.parent.id,
       };
       data.push(cardData);
-      console.log(data)
+      console.log(data);
       return data;
     }
-    console.log('s')
+    console.log("s");
     const collectionRef = collection(db, "folders");
     const getFolder = doc(collectionRef, folderid);
 
@@ -65,7 +65,7 @@ export const getSpecificCategory = async (id: string, folderid: string) => {
     };
 
     data.push(cardData);
-    console.log(data)
+    console.log(data);
 
     return data;
   } catch (error) {
@@ -294,7 +294,18 @@ export const editFolder = async (folderid: string, value: string) => {
   });
 };
 
-export const delFolder = async (folderid: string) => {
+export const getFolderName = async (folderid: string) => {
+  const collectionRef = collection(db, "folders"); // Reference to the "folders" collection
+  // const docRef = doc(collectionRef, folderid);
+   const d=await getDoc(doc(collectionRef,folderid));
+ 
+   return d.data()?.name
+  // await updateDoc(docRef, {
+  //   name: value,
+  // });
+};
+
+export const deleteFolder = async (folderid: string) => {
   const storage = getStorage();
   try {
     const collectionRef = collection(db, "folders");
@@ -302,20 +313,21 @@ export const delFolder = async (folderid: string) => {
     console.log(getFolder);
     const nestedCollectionRef = collection(getFolder, "categories");
     const querySnapshot = await getDocs(nestedCollectionRef);
+    if (querySnapshot) {
+      querySnapshot.docs.map(async (doc) => {
+        console.log(doc);
 
-    querySnapshot.docs.map(async (doc) => {
-      console.log(doc);
-
-      const desertRef = ref(storage, `images/${folderid}/${doc.id}`);
-      deleteObject(desertRef)
-        .then(() => {
-          console.log("deleted");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      await deleteDoc(doc.ref);
-    });
+        const desertRef = ref(storage, `images/${folderid}/${doc.id}`);
+        deleteObject(desertRef)
+          .then(() => {
+            console.log("deleted");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        await deleteDoc(doc.ref);
+      });
+    }
     await deleteDoc(doc(collectionRef, folderid));
 
     // return data;

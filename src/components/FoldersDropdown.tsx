@@ -3,7 +3,10 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { getFolderCategories } from "../../services/card-service";
+import {
+  getFolderCategories,
+  getFolderName,
+} from "../../services/card-service";
 import { revalidatePath } from "next/cache";
 
 const FoldersDropdown = ({
@@ -21,7 +24,6 @@ const FoldersDropdown = ({
 
   const handleFolderChange = async (key: string, value: string) => {
     try {
-      
       console.log(key);
 
       router.push("/home" + "?" + createQueryString(key, value));
@@ -39,8 +41,9 @@ const FoldersDropdown = ({
   // useEffect(()=>{
   //   router.refresh()
   // },[])
+  const wholeFolder = Object.entries<string>(folders)[0];
   const [firstFolderId, firstFolderName] = Object.entries<string>(folders)[0];
-  const [val, setVal] = useState(firstFolderName);
+  const [val, setVal] = useState({ id: firstFolderId, name: firstFolderName });
   const createQueryString = (key: string, value: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set(key, String(value));
@@ -48,6 +51,24 @@ const FoldersDropdown = ({
     return String(params);
   };
 
+  const initialFolder = async () => {
+    const name = await getFolderName(val.id);
+    console.log(name);
+    setVal({ id: val.id, name: name });
+  };
+
+  useEffect(() => {
+    // initialFolder();
+    handleFolderChange("folderid", firstFolderId);
+    console.log(folders, firstFolderName, Object.keys(folders).length);
+  }, [Object.keys(folders).length]);
+
+  useEffect(() => {
+    initialFolder();
+
+    //  handleFolderChange("folderid", firstFolderId);
+    console.log(folders, firstFolderName, Object.values(folders), val);
+  }, [folders[val.id]]);
   return (
     <>
       <div className="flex ">
@@ -67,8 +88,9 @@ const FoldersDropdown = ({
                     key={key}
                     className="hover:bg-blue-700 p-2 cursor-pointer"
                     onClick={() => {
-                      setVal(value)
-                      handleFolderChange("folderid", key)}}
+                      setVal({ id: key, name: value });
+                      handleFolderChange("folderid", key);
+                    }}
                   >
                     {value}
                   </li>
@@ -80,7 +102,7 @@ const FoldersDropdown = ({
         <p
           className={` text-[#852E2C]  mt-[-1px] ml-2 text-xl font-extrabold `}
         >
-          {val}
+          {val.name}
         </p>
       </div>
     </>

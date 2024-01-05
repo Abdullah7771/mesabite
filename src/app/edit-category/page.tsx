@@ -41,8 +41,8 @@ const EditCategory = () => {
 
   // Create a storage reference from our storage service
   const [name, setName] = useState<any>();
-  const [val, setVal] = useState();
-  const [desc, setDesc] = useState();
+  const [val, setVal] = useState<any>();
+  const [desc, setDesc] = useState<any>();
   const [lastImg, setLastImg] = useState<File | null | any>("");
 
   const [img, setImg] = useState<File | null | any>("");
@@ -52,6 +52,7 @@ const EditCategory = () => {
       folderid
     )) as CardData[];
     console.log(data);
+    
     setVal(data[0].title);
     setDesc(data[0].description);
     setImg(data[0].image);

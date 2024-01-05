@@ -5,10 +5,6 @@ import React, { useState } from "react";
 import { ImageModalProps } from "../types";
 import { montserrat } from "../fonts";
 
-
-
-
-
 const ImageModal: React.FC<ImageModalProps> = ({
   styles,
   sizes,
@@ -30,7 +26,9 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
   return (
     <div className="  ">
-      <p className={`mt-5 ml-2 text-base font-semibold ${montserrat.className}`}>
+      <p
+        className={`mt-5 ml-2 text-base font-semibold ${montserrat.className}`}
+      >
         {optional || "Image (Optional)"}
       </p>
 

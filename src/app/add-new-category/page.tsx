@@ -8,7 +8,6 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Montserrat } from "next/font/google";
 import localFont from "next/font/local";
 import Link from "next/link";
 import React, {
@@ -20,16 +19,14 @@ import React, {
 
 } from "react";
 
-const inter = Montserrat({ subsets: ["latin"], weight: "600" });
 
 import { cardData } from "../../../mock";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useRouter, useSearchParams } from "next/navigation";
+import { montserrat,myFont } from "../../../fonts";
 
 
-const myFont = localFont({
-  src: "../../../public/font/Recoleta-RegularDEMO.otf",
-});
+
 
 
 const NewCategory = () => {
@@ -122,7 +119,7 @@ const search=searchParams.get("folderid");
           </div>
           <div className="">
             <p
-              className={`mt-5 ml-2 text-base font-semibold ${inter.className}`}
+              className={`mt-5 ml-2 text-base font-semibold ${montserrat.className}`}
             >
               Image (Optional)
             </p>
@@ -165,7 +162,7 @@ const search=searchParams.get("folderid");
 
                   <p
                     className={
-                      inter.className +
+                      montserrat.className +
                       ` font-semiboldtext-lg mt-8 pr-2 text-[#852E2C]`
                     }
                   >
@@ -194,7 +191,7 @@ const search=searchParams.get("folderid");
               styles="bg-[url('/inputshape2.png')]  lg:w-[350px] lg:h-[40px]  md:w-[368px] md:h-[52px]    sm:w-[320px] ]      w-full  bg-contain bg-no-repeat p-2"
             />
 
-            <p className={`mt-5 ml-2 ${inter.className}`}>
+            <p className={`mt-5 ml-2 ${montserrat.className}`}>
               {" "}
               Description(Optional)
             </p>

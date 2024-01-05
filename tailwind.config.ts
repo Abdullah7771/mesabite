@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-import { Roboto } from "next/font/google";
 
 
 const config: Config = {

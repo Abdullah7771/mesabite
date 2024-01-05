@@ -2,9 +2,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 
-import { Montserrat } from "next/font/google";
 import { ImageModalProps } from "../types";
-const inter = Montserrat({ subsets: ["latin"] });
+import { montserrat } from "../fonts";
+
+
 
 
 
@@ -29,7 +30,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
   return (
     <div className="  ">
-      <p className={`mt-5 ml-2 text-base font-semibold ${inter.className}`}>
+      <p className={`mt-5 ml-2 text-base font-semibold ${montserrat.className}`}>
         {optional || "Image (Optional)"}
       </p>
 
@@ -60,7 +61,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
             <p
               className={
-                inter.className +
+                montserrat.className +
                 ` font-semibold mt-4 ${textsize} pr-2 text-[#852E2C]`
               }
             >

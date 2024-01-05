@@ -1,5 +1,4 @@
 "use client";
-import Buttons from "../../../utils/Buttons";
 import Input from "../../../utils/Input";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -8,34 +7,20 @@ import {
   faRectangleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
-import { useContext, useState, useTransition } from "react";
+import { useState } from "react";
 
 // import { CardContext } from "@/context/CardContext";
 
-import { Montserrat } from "next/font/google";
-import localFont from "next/font/local";
 import { addFolder } from "../../../services/card-service";
-import { cardData } from "../../../mock";
 import ImageModal from "../../../utils/ImageModal";
 
-const inter = Montserrat({ subsets: ["latin"] });
 import { useRouter } from "next/navigation";
-
-const myFont = localFont({
-  src: "../../../public/font/Recoleta-RegularDEMO.otf",
-});
+import { inter, myFont } from "../../../fonts";
 
 const NewFolder = () => {
   const [val, setVal] = useState("");
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  if (isPending) {
-    return (
-      <div>Loading...</div>
-    )
-  }
-  // const { setIsOpen, folders, setFolders } = useContext(CardContext);
+
   const addCategory = async (cat: string) => {
     const folid = await addFolder(cat);
   };
@@ -48,16 +33,13 @@ const NewFolder = () => {
             Create New Category Folder
           </p>
 
-            <FontAwesomeIcon
-              icon={faRectangleXmark}
-              className=" cursor-pointer"
-              size="xl"
-             
-               onClick={()=>router.push('/home')}
-                //   setIsOpen({ page: "home", cardData: cardData });
-           
-            />
-      
+          <FontAwesomeIcon
+            icon={faRectangleXmark}
+            className=" cursor-pointer"
+            size="xl"
+            onClick={() => router.push("/home")}
+            //   setIsOpen({ page: "home", cardData: cardData });
+          />
         </div>
         <p
           className={`mt-8 mx-auto text-center font-normal h-3 text-[#BF5627] ${inter.className}`}
@@ -87,35 +69,31 @@ const NewFolder = () => {
         <hr className="mt-4 " />
         <div className="">
           <div className="flex justify-center  mb-2 ">
-              <button
-                onClick={() =>router.push('/home')}
-              
-                className="bg-[#852E2C] text-white font-bold w-[150px] h-[50px] mt-2 mr-5   rounded-full"
-              >
-                Cancel
-              </button>
+            <button
+              onClick={() => router.push("/home")}
+              className="bg-[#852E2C] text-white font-bold w-[150px] h-[50px] mt-2 mr-5   rounded-full"
+            >
+              Cancel
+            </button>
 
-              <button
-                onClick={(e) => {
-                  //  console.log(val)
-                   addCategory(val);
-                  // setIsOpen({ page: "home", cardData: cardData });
-                  e.preventDefault();
-                  router.push('/home');
-                  setTimeout(()=>{
+            <button
+              onClick={(e) => {
+                //  console.log(val)
+                addCategory(val);
+                // setIsOpen({ page: "home", cardData: cardData });
+                e.preventDefault();
+                router.push("/home");
+                setTimeout(() => {
+                  router.refresh();
+                }, 1000);
 
-                    router.refresh()
-                  },1000)
-                
-                
-                  
-                  // setCategory(val);
-                  // handleSubmit(); // Call the handleSubmit function
-                }}
-                className="bg-[#FFCD00] text-[#852E2C] font-bold w-[150px] h-[50px] mt-2 rounded-full"
-              >
-                Save
-              </button>
+                // setCategory(val);
+                // handleSubmit(); // Call the handleSubmit function
+              }}
+              className="bg-[#FFCD00] text-[#852E2C] font-bold w-[150px] h-[50px] mt-2 rounded-full"
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>

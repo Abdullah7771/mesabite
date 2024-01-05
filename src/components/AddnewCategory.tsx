@@ -14,19 +14,13 @@ const AddnewCategory = ({
 }) => {
   const searchParams = useSearchParams();
 
-  const createQueryString = (key: string, value: number | string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set(key, String(value));
-    return String(params);
-  };
   const search = String(searchParams.get("folderid"));
+  // const query2 = `/add-new-category?folder=${folder}&folderid=${folderid}`;
+
   const query = search
-    ? "/add-new-category" + "?" + createQueryString("folder", String(folder))
-    : "/add-new-category" +
-      "?" +
-      createQueryString("folder", String(folder)) +
-      "&" +
-      createQueryString("folderid", String(folderid));
+    ? `/add-new-category?folder=${folder}&folderid=${folderid}`
+    : `/add-new-category?folder=${folder}`;
+
   return (
     <>
       <Link href={query}>

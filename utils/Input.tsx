@@ -1,13 +1,11 @@
 "use client";
+import { montserrat } from "../fonts";
 import { InputProps } from "../types";
-import { Montserrat } from "next/font/google";
-import { Dispatch, SetStateAction } from "react";
-const inter = Montserrat({ subsets: ["latin"], weight: "600" });
 
 const Input = ({ name, styles, val, type }: InputProps) => {
   return (
     <div>
-      <p className={`text-base ml-2 font-semibold ${inter.className}`}>
+      <p className={`text-base ml-2 font-semibold ${montserrat.className}`}>
         {name}
       </p>
       <input

@@ -7,12 +7,9 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Montserrat } from "next/font/google";
-import localFont from "next/font/local";
 import Link from "next/link";
 import React, { useContext, useEffect, useRef, useState } from "react";
-const inter = Montserrat({ subsets: ["latin"], weight: "600" });
-
+inter
 import { CardData } from "../../../types";
 
 import {
@@ -25,9 +22,8 @@ import {
 import Buttons from "../../../utils/Buttons";
 import { getSpecificCategory } from "../../../services/card-service";
 import { useSearchParams } from "next/navigation";
-const myFont = localFont({
-  src: "../../../public/font/Recoleta-RegularDEMO.otf",
-});
+import { inter,myFont } from "../../../fonts";
+
 
 const EditCategory = () => {
   const searchParams = useSearchParams();

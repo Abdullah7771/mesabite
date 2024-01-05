@@ -3,13 +3,12 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { faGear, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { Montserrat } from "next/font/google";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { delCategories } from "../../services/card-service";
 import { CardData, CardProps } from "../../types";
+import { inter, montserrat } from "../../fonts";
 
-const inter = Montserrat({ subsets: ["latin"], weight: "500" });
 
 const Card = ({
   title,
@@ -33,12 +32,7 @@ const Card = ({
 
   const searchParams = useSearchParams();
   const search = String(searchParams.get("folderid"));
-  const createQueryString = (key: string, value: number | string) => {
-    const params = new URLSearchParams(searchParams);
 
-    params.set(key, String(value));
-    return String(params);
-  };
   const query2 = `/edit-category?id=${id}&folderid=${folderid}`;
 
   const query = `/edit-category?id=${id}`;

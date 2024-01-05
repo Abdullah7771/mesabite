@@ -83,9 +83,7 @@ const NewFolder = () => {
                 // setIsOpen({ page: "home", cardData: cardData });
                 e.preventDefault();
                 router.push("/home");
-                setTimeout(() => {
-                  router.refresh();
-                }, 1000);
+             
 
                 // setCategory(val);
                 // handleSubmit(); // Call the handleSubmit function

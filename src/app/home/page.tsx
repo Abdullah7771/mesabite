@@ -23,7 +23,7 @@ const Page = async ({ searchParams }: Props) => {
   const folderid = searchParams?.folderid
     ? searchParams?.folderid
     : firstFolderId;
-
+    const categories = (await getFolderCategories(folderid)) as CardData[];
   // const [cards, setCards] = useState<CardData[]>([]);
   // const [categories, setCategories] = useState<CardData[]>([]);
   // const contextValue: CardContextProps = {

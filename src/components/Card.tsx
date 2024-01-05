@@ -80,9 +80,7 @@ const Card = ({
                     className="md:h-6 h-3 bg-white text-[#852E2C] rounded-full p-2"
                     onClick={() => {
                       delCategories(id, folder, folderid);
-                      setTimeout(() => {
-                        router.refresh();
-                      }, 1000);
+                  
                     }}
                   />
                 </div>

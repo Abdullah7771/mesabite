@@ -8,35 +8,20 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import localFont from "next/font/local";
 import Link from "next/link";
-import React, {
-  LegacyRef,
-  MutableRefObject,
-  useContext,
-  useRef,
-  useState,
+import React, { useRef, useState } from "react";
 
-} from "react";
-
-
-import { cardData } from "../../../mock";
+import { collection, doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useRouter, useSearchParams } from "next/navigation";
-import { montserrat,myFont } from "../../../fonts";
-
-
-
-
+import { montserrat, myFont } from "../../../fonts";
+import { db } from "../../../services/firebase-config";
 
 const NewCategory = () => {
-
-
   const searchParams = useSearchParams();
-const search=searchParams.get("folderid");
-  const folderid = search ? String(search) : ''
-  const folder = searchParams.get("folder")
-
+  const search = searchParams.get("folderid");
+  const folderid = search ? String(search) : "";
+  const folder = searchParams.get("folder");
 
   // Get a reference to the storage service, which is used to create references in your storage bucket
   const storage = getStorage();
@@ -57,26 +42,15 @@ const search=searchParams.get("folderid");
       // const storageRef = ref(storage, `images/${imageUrl?.name}`);
       console.log(imageUrl);
       setImg(imageUrl);
-
-      // try {
-      //   if (imageUrl) {
-      //     const storageRef =  ref(storage, `images/${img?.name}`);
-      //     const res = await uploadBytes(storageRef, imageUrl);
-      //     const downloadUrl = await getDownloadURL(storageRef);
-      //     console.log(downloadUrl);
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      // }
     }
   };
 
   const imgRef = useRef<any>();
 
-  const handleSubmit = async (docid: string | undefined) => {
+  const handleSubmit = async (docid: string | undefined, folderid?: string) => {
     console.log(docid);
     const storageRef =
-      folder === 'true'
+      folder === "true"
         ? ref(storage, `images/${folderid}/${docid}`)
         : ref(storage, `categories/${docid}`);
     console.log(folder);
@@ -87,7 +61,27 @@ const search=searchParams.get("folderid");
         console.log(storageRef);
         const res = await uploadBytes(storageRef, img);
         const downloadUrl = await getDownloadURL(storageRef);
+        console.log(folderid);
         console.log(downloadUrl);
+        if (folderid != "undefined") {
+          console.log("sad");
+          const collectionRef = collection(db, "folders");
+          const getFolder = doc(collectionRef, folderid);
+
+          const nestedCollectionRef = collection(getFolder, "categories");
+
+          await updateDoc(doc(nestedCollectionRef, docid), {
+            image: downloadUrl,
+          });
+          return downloadUrl;
+        }
+        const collectionRef = collection(db, "categories");
+
+        await updateDoc(doc(collectionRef, docid), {
+          image: downloadUrl,
+        });
+
+        return downloadUrl;
       }
     } catch (error) {
       console.log(error);
@@ -110,10 +104,8 @@ const search=searchParams.get("folderid");
                 icon={faXmark}
                 className="cursor-pointer "
                 size="xl"
-               
-                
-                  //   setIsOpen({ page: "home", cardData: cardData });
-               
+
+                //   setIsOpen({ page: "home", cardData: cardData });
               />
             </Link>
           </div>
@@ -213,14 +205,13 @@ const search=searchParams.get("folderid");
           <div className="lg:pl-[5%]">
             <Buttons
               task="add"
-              imgName={img?.name}
               id={""}
               title={val}
               description={desc}
               quantity={0}
               image={img?.name}
               handleSubmit={handleSubmit}
-              folder={folder==='true'}
+              folder={folder === "true"}
               folderid={folderid}
             />
           </div>

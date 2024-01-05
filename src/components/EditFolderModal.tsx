@@ -4,12 +4,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { editFolder, getFolderName } from "../../services/card-service";
 import { cardData } from "../../mock";
 import { useRouter } from "next/navigation";
+import { CardContext } from "../../context/CardContext";
 
 interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   folderid: string;
+  setCurrentFolder: React.Dispatch<React.SetStateAction<any>>;
 }
-const EditFolderModal = ({ setOpen, folderid }: Props) => {
+const EditFolderModal = ({ setOpen, folderid, setCurrentFolder }: Props) => {
+  const { allfolders, setAllFolders } = useContext(CardContext);
   const router = useRouter();
   const [val, setVal] = useState("");
   const handleChange = (e: any) => {
@@ -18,6 +21,16 @@ const EditFolderModal = ({ setOpen, folderid }: Props) => {
   const getVal = async () => {
     const data = await getFolderName(folderid);
     setVal(data);
+  };
+
+  const updateFolderName = async () => {
+    await editFolder(folderid, val);
+    setOpen(false);
+    setCurrentFolder({ id: folderid, name: val });
+    setAllFolders((prevFolders: any) => ({
+      ...prevFolders,
+      [folderid]: val,
+    }));
   };
   useEffect(() => {
     getVal();
@@ -44,13 +57,7 @@ const EditFolderModal = ({ setOpen, folderid }: Props) => {
           </button>
 
           <button
-            onClick={() => {
-              editFolder(folderid, val);
-              setTimeout(() => {
-                router.refresh();
-              }, 1000);
-              setOpen(false)
-            }}
+            onClick={updateFolderName}
             className="bg-[#FFCD00] text-[#852E2C] font-bold w-[150px] h-[50px] mt-2 rounded-full"
           >
             Save

@@ -2,19 +2,21 @@
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import {
-  getFolderName
-} from "../../services/card-service";
+import { useContext, useEffect, useState } from "react";
+import { getFolderName } from "../../services/card-service";
+import { CardContext } from "../../context/CardContext";
 
 const FoldersDropdown = ({
-  folders,
+  currentFolder,
+  setCurrentFolder,
 }: {
-  folders: { id: string; name: string };
+  currentFolder: { id: string; name: string };
+  setCurrentFolder: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const { allfolders, folderid } = useContext(CardContext);
+  const folders = allfolders;
   const [dropdpown, setDropdown] = useState(false);
   const handleClick = () => {
     setDropdown(!dropdpown);
@@ -25,7 +27,7 @@ const FoldersDropdown = ({
       console.log(key);
 
       router.push("/home" + "?" + createQueryString(key, value));
-  
+
       // await getFolderCategories(key);
       setDropdown(false);
     } catch (error) {
@@ -37,9 +39,9 @@ const FoldersDropdown = ({
   // useEffect(()=>{
   //   router.refresh()
   // },[])
-  const wholeFolder = Object.entries<string>(folders)[0];
+
   const [firstFolderId, firstFolderName] = Object.entries<string>(folders)[0];
-  const [val, setVal] = useState({ id: firstFolderId, name: firstFolderName });
+  // const [val, setVal] = useState({ id: firstFolderId, name: firstFolderName });
   const createQueryString = (key: string, value: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set(key, String(value));
@@ -47,24 +49,26 @@ const FoldersDropdown = ({
     return String(params);
   };
 
-  const initialFolder = async () => {
-    const name = await getFolderName(val.id);
-    console.log(name);
-    setVal({ id: val.id, name: name });
-  };
+ 
 
   useEffect(() => {
-    // initialFolder();
+    //  initialFolder();
     handleFolderChange("folderid", firstFolderId);
-    console.log(folders, firstFolderName, Object.keys(folders).length);
-  }, [Object.keys(folders).length]);
+    // setVal({id:firstFolderId,name:firstFolderName})
+    console.log(
+      folders,
+      folderid,
+      firstFolderName,
+      Object.keys(folders).length
+    );
+  }, [Object.keys(allfolders).length]);
 
-  useEffect(() => {
-    initialFolder();
+  // useEffect(() => {
+  //   initialFolder();
 
-    //  handleFolderChange("folderid", firstFolderId);
-    console.log(folders, firstFolderName, Object.values(folders), val);
-  }, [folders[val.id]]);
+  //   //  handleFolderChange("folderid", firstFolderId);
+  //   console.log(folders, firstFolderName, Object.values(folders), val);
+  // }, [folders[val.id]]);
   return (
     <>
       <div className="flex ">
@@ -83,9 +87,10 @@ const FoldersDropdown = ({
                   <li
                     key={key}
                     className="hover:bg-blue-700 p-2 cursor-pointer"
-                    onClick={() => {
-                      setVal({ id: key, name: value });
+                    onClick={(e) => {
+                      setCurrentFolder({ id: key, name: value });
                       handleFolderChange("folderid", key);
+                      e.preventDefault();
                     }}
                   >
                     {value}
@@ -98,7 +103,7 @@ const FoldersDropdown = ({
         <p
           className={` text-[#852E2C]  mt-[-1px] ml-2 text-xl font-extrabold `}
         >
-          {val.name}
+          {currentFolder.name}
         </p>
       </div>
     </>

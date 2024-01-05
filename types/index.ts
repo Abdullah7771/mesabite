@@ -16,7 +16,6 @@ interface CardProps {
   title: string;
   description: string;
   image?: string | StorageReference;
-  imgName: string;
   id: string;
   folder?: boolean;
   folderid?: string;
@@ -26,7 +25,6 @@ interface CardData {
   description: string;
   image?: string | StorageReference;
   quantity: number;
-  imgName: string;
   id: string;
   folderid?: string;
 }
@@ -54,14 +52,14 @@ interface ImageModalProps {
 }
 
 interface ButtonProps {
-  handleSubmit: (docid: string) => void;
+  handleSubmit: (docid: string, folderid?: string) => void;
 
   title: string;
   description: string;
   quantity: number;
   image: string;
   id: string;
-  imgName: string;
+  imgName?: string;
   task: string;
   folder?: boolean | string;
   folderid?: string;

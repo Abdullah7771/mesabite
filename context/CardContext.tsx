@@ -1,20 +1,29 @@
 import React, { createContext } from "react";
 import { CardData } from "../types";
 export interface CardContextProps {
-    setCards: React.Dispatch<React.SetStateAction<CardData[]>>;
-    cards: CardData[];
-    setCategories: React.Dispatch<React.SetStateAction<CardData[]>>;
-    categories: CardData[];
-  }
-const initialContextValue:CardContextProps = {
-  setCards: ((value: CardData[]) => {}) as React.Dispatch<
-    React.SetStateAction<CardData[]>
-  >,
-  cards: [] as CardData[],
+  setFolderCat: React.Dispatch<React.SetStateAction<CardData[]>>;
+  foldercat: CardData[];
+  setCat: React.Dispatch<React.SetStateAction<CardData[]>>;
+  cat: CardData[];
+  folderid: string;
 
-  setCategories: ((value: CardData[]) => {}) as React.Dispatch<
+  setAllFolders: React.Dispatch<React.SetStateAction<any>>;
+  allfolders: [];
+}
+const initialContextValue = {
+  setFolderCat: ((value: CardData[]) => {}) as React.Dispatch<
     React.SetStateAction<CardData[]>
   >,
-  categories: [] as CardData[],
+  foldercat: [] as CardData[],
+
+  setCat: ((value: CardData[]) => {}) as React.Dispatch<
+    React.SetStateAction<CardData[]>
+  >,
+  cat: [] as CardData[],
+  folderid: "",
+  allfolders: [],
+  setAllFolders: ((value: []) => {}) as React.Dispatch<
+  React.SetStateAction<any>
+>,
 };
 export const CardContext = createContext(initialContextValue);

@@ -23,6 +23,9 @@ const NewFolder = () => {
 
   const addCategory = async (cat: string) => {
     const folid = await addFolder(cat);
+    setTimeout(() => {
+      router.push("/home");
+    }, 500);
   };
 
   return (
@@ -38,7 +41,6 @@ const NewFolder = () => {
             className=" cursor-pointer"
             size="xl"
             onClick={() => router.push("/home")}
-            //   setIsOpen({ page: "home", cardData: cardData });
           />
         </div>
         <p
@@ -77,16 +79,8 @@ const NewFolder = () => {
             </button>
 
             <button
-              onClick={(e) => {
-                //  console.log(val)
+              onClick={() => {
                 addCategory(val);
-                // setIsOpen({ page: "home", cardData: cardData });
-                e.preventDefault();
-                router.push("/home");
-             
-
-                // setCategory(val);
-                // handleSubmit(); // Call the handleSubmit function
               }}
               className="bg-[#FFCD00] text-[#852E2C] font-bold w-[150px] h-[50px] mt-2 rounded-full"
             >

@@ -13,7 +13,7 @@ const Input = ({ name, styles, val, type }: InputProps) => {
         className={`w-full   bg-[#FFF6DF] mt-2 outline-none ${styles} `}
         onChange={(e) => val(e.target.value)}
       />
-      {/* <p className="text-end text-xs lg:pr-5 mt-[-2%]">0/50</p> */}
+ 
     </div>
   );
 };

@@ -1,36 +1,25 @@
-import React from "react";
-import {
-  getAllFolders,
-  getFolderCategories,
-  getCategories,
-} from "../../services/card-service";
-import { CardData } from "../../types";
+import { useContext } from "react";
+import { CardContext } from "../../context/CardContext";
 import Card from "./Card";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
-import { CiCirclePlus } from "react-icons/ci";
-import ImageModal from "../../utils/ImageModal";
-import AddnewCategory from "./AddnewCategory";
 
-const FolderCat = async ({ id ,cat}: { id: string ,cat:CardData[]}) => {
-  // const id='743Ub4LqggljSXaAK3hG'
-  const categories = (await getFolderCategories(id)) as CardData[];
-  console.log(categories);
+const FolderCat = () => {
+  const {
+    foldercat
+    } = useContext(CardContext);
   return (
     <>
       <div>
-        {categories.map((card, index) => (
+        {foldercat.map((card, index) => (
           <Card
             title={card.title}
             description={card.description}
             key={index}
-            image={card.image || ''}
-            imgName={card.imgName}
-            id={card.id || ''}
+            image={card.image || ""}
+            id={card.id || ""}
             folder={true}
-            folderid={id}
+            folderid={card.folderid}
           />
         ))}
-        <AddnewCategory folder={true} folderid={id} />
       </div>
     </>
   );

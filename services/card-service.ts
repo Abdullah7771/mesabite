@@ -24,7 +24,7 @@ export const getSpecificCategory = async (id: string, folderid: string) => {
     const storage = getStorage();
 
     const data: CardData[] = [];
-    if (folderid == "undefined" || folderid=="null") {
+    if (folderid == "undefined" || folderid == "null") {
       console.log("asd");
       const collectionRef = collection(db, "categories"); // Reference to the "folders" collection
 
@@ -39,7 +39,7 @@ export const getSpecificCategory = async (id: string, folderid: string) => {
         image: downloadUrl,
         description: specific_doc.data()?.description,
         quantity: specific_doc.data()?.quantity,
-        imgName: specific_doc.data()?.imgName,
+     
         id: specific_doc.id,
         folderid: specific_doc.ref.parent.id,
       };
@@ -61,7 +61,6 @@ export const getSpecificCategory = async (id: string, folderid: string) => {
       image: downloadUrl,
       description: specific_doc.data()?.description,
       quantity: specific_doc.data()?.quantity,
-      imgName: specific_doc.data()?.imgName,
       id: specific_doc.id,
       folderid: specific_doc.ref.parent.id,
     };
@@ -90,17 +89,17 @@ export const getFolderCategories = async (folderid: string) => {
     const nestedQuerySnapshot = await getDocs(nestedCollectionRef);
     await Promise.all(
       nestedQuerySnapshot.docs.map(async (doc) => {
-        const imgRef = ref(storage, `images/${folderid}/${doc.id}`);
-        const downloadUrl = await getDownloadURL(imgRef);
+        // const imgRef = ref(storage, `images/${folderid}/${doc.id}`);
+        // const downloadUrl = await getDownloadURL(imgRef);
 
         const cardData: CardData = {
           title: doc.data().title,
-          image: downloadUrl,
+          image: doc.data().image,
           description: doc.data().description,
           quantity: doc.data().quantity,
-          imgName: doc.data().imgName,
+          
           id: doc.id,
-          folderid: doc.ref.parent.id,
+          // folderid: doc.ref.parent.id,
         };
 
         data.push(cardData);
@@ -123,18 +122,18 @@ export const getCategories = async (): Promise<CardData[]> => {
     await Promise.all(
       querySnapshot.docs.map(async (doc) => {
         // console.log(doc.ref.parent.id)
-        const imgRef = ref(storage, `categories/${doc.id}`);
-        // console.log(imgRef)
-        const downloadUrl = await getDownloadURL(imgRef);
+        // const imgRef = ref(storage, `categories/${doc.id}`);
+        // // console.log(imgRef)
+        // const downloadUrl = await getDownloadURL(imgRef);
 
         const cardData: CardData = {
           title: doc.data().title,
-          image: downloadUrl,
+          image: doc.data().image,
           description: doc.data().description,
           quantity: doc.data().quantity,
-          imgName: doc.data().imgName,
+          
           id: doc.id,
-          folderid: doc.ref.parent.id,
+          //  folderid: doc.ref.parent.id,
         };
 
         data.push(cardData);
@@ -166,13 +165,13 @@ export const addFolderCategories = async (
   folderid: string,
   folder?: boolean | string
 ) => {
-  const { title, description, quantity, imgName } = data;
+  const { title, description, quantity } = data;
 
   const sendData = {
     title,
     description,
     quantity,
-    imgName,
+   
   };
   console.log(sendData);
   console.log(folder);
@@ -206,17 +205,16 @@ export const addFolder = async (value: string) => {
 
 export const updateFolderCategories = async (
   data: CardData,
-  folderid: string,
+  folderid?: string,
   folder?: boolean | string
 ): Promise<string> => {
   console.log(data);
-  const { title, description, quantity, imgName, id } = data;
+  const { title, description, quantity,  id } = data;
 
   const sendData = {
     title,
     description,
     quantity,
-    imgName,
     id,
   };
   console.log(sendData, folderid);
@@ -257,7 +255,7 @@ export const filterFolderCategories = async (
     specificFolderDocRef,
     "categories"
   );
-
+  const data: any = [];
   // Query to get documents where "title" equals the specified title
   const q = query(
     categoriesCollectionRef,
@@ -271,7 +269,9 @@ export const filterFolderCategories = async (
   // Iterate through the documents
   querySnapshot.forEach((doc) => {
     console.log(doc.id, " => ", doc.data());
+    data.push(doc.data());
   });
+  return data;
 };
 
 export const filterCategories = async (title: string) => {
@@ -280,12 +280,14 @@ export const filterCategories = async (title: string) => {
     where("title", ">=", title),
     where("title", "<=", title + "\uf8ff")
   );
-
+  const data: any = [];
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
+    data.push(doc.data());
     console.log(doc.id, " => ", doc.data());
   });
+  return data;
 };
 
 export const delCategories = async (

@@ -8,35 +8,31 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { delCategories } from "../../services/card-service";
 import { CardData, CardProps } from "../../types";
 import { inter, montserrat } from "../../fonts";
+import { useContext } from "react";
+import { CardContext } from "../../context/CardContext";
 
-
-const Card = ({
-  title,
-  description,
-  image,
-  imgName,
-  id,
-  folder,
-  folderid,
-}: CardProps) => {
-  const cardData: CardData = {
-    title,
-    description,
-    quantity: 0,
-    imgName,
-    image,
-    id,
-    folderid,
-  };
+const Card = ({ title, description, image, id, folder }: CardProps) => {
   const router = useRouter();
+  const { cat, foldercat, setFolderCat, setCat } = useContext(CardContext);
 
   const searchParams = useSearchParams();
   const search = String(searchParams.get("folderid"));
 
-  const query2 = `/edit-category?id=${id}&folderid=${folderid}`;
+  const query2 = `/edit-category?id=${id}&folderid=${search}`;
 
   const query = `/edit-category?id=${id}`;
+  const delCard = async() => {
+    console.log(id, folder, search);
+   await  delCategories(id, folder, search);
+    if (folder) {
+      const filterFolCat = foldercat.filter((cat) => cat.id !== id);
+      setFolderCat(filterFolCat);
+    } else {
+      const filterCat = cat.filter((cat) => cat.id !== id);
+      setCat(filterCat);
+    }
 
+  };
   return (
     <>
       <div className="mt-5  ">
@@ -59,7 +55,7 @@ const Card = ({
                   <FontAwesomeIcon
                     icon={faGear}
                     className="md:h-6 h-3 bg-white  text-[#852E2C] rounded-full p-2"
-                    onClick={() => console.log(folder)}
+                    onClick={() => console.log(typeof folder)}
                   />
 
                   <FontAwesomeIcon
@@ -78,11 +74,9 @@ const Card = ({
                   <FontAwesomeIcon
                     icon={faTrash}
                     className="md:h-6 h-3 bg-white text-[#852E2C] rounded-full p-2"
-                    onClick={() => {
-                      delCategories(id, folder, folderid);
-                      setTimeout(() => {
-                        router.refresh();
-                      }, 1000);
+                    onClick={()=>{
+                      delCard()
+                    
                     }}
                   />
                 </div>

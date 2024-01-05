@@ -9,10 +9,22 @@ import {
   filterCategories,
   filterFolderCategories,
 } from "../../services/card-service";
+import { CardData } from "../../types";
+import { CardContext } from "../../context/CardContext";
 
 const myFont = localFont({ src: "../../public/font/Recoleta-RegularDEMO.otf" });
+interface SearchProps {
+  id: string;
+  setCat: React.Dispatch<React.SetStateAction<CardData[]>>;
+  setFolderCat: React.Dispatch<React.SetStateAction<CardData[]>>;
+}
 
-const SearchComponent = ({ id }: { id: string }) => {
+const SearchComponent = () => {
+  const {
+  setCat,
+  setFolderCat,
+  folderid
+  } = useContext(CardContext);
   let timeout: any = null;
   const [icon, setIcon] = useState(true);
   const [val, setVal] = useState("");
@@ -26,7 +38,7 @@ const SearchComponent = ({ id }: { id: string }) => {
     }
   };
 
-  const getFilterCat = (e: any) => {
+  const getFilterCat = async (e: any) => {
     clearTimeout(timeout);
 
     // Make a new timeout set to go off in 1000ms (1 second)
@@ -34,8 +46,15 @@ const SearchComponent = ({ id }: { id: string }) => {
       console.log("Input Value:", e.target.value);
     }, 1500);
     console.log("Search form submitted");
-    const filterFod = filterFolderCategories(id, e.target.value);
-    const filterCat = filterCategories(e.target.value);
+    const filterFod: CardData[] = (await filterFolderCategories(
+      folderid,
+      e.target.value
+    )) as CardData[];
+    console.log(filterFod);
+    setFolderCat(filterFod);
+    const filterCat = (await filterCategories(e.target.value)) as CardData[];
+    console.log(filterCat);
+    setCat(filterCat);
   };
 
   return (

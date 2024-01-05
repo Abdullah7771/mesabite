@@ -8,9 +8,11 @@ import Link from "next/link";
 import React from "react";
 import {
   getAllFolders,
+  getCategories,
   getFolderCategories,
 } from "../../../services/card-service";
 import { CardData, curFolder } from "../../../types";
+import ParentClientComponent from "@/components/ParentClientComponent";
 
 interface Props {
   searchParams?: { folderid?: string };
@@ -19,33 +21,20 @@ interface Props {
 const Page = async ({ searchParams }: Props) => {
   var folders = await getAllFolders();
   const [firstFolderId, firstFolderName] = Object.entries<string>(folders)[0];
-
-  const folderid = searchParams?.folderid
-    ? searchParams?.folderid
-    : firstFolderId;
-    const categories = (await getFolderCategories(folderid)) as CardData[];
-  // const [cards, setCards] = useState<CardData[]>([]);
-  // const [categories, setCategories] = useState<CardData[]>([]);
-  // const contextValue: CardContextProps = {
-  //   setCards,
-  //   cards,
-  //   setCategories,
-  //   categories,
-
-  // const id='743Ub4LqggljSXaAK3hG'
-  // }
+  const initialFolderId = searchParams?.folderid;
+  console.log(searchParams?.folderid);
+  const folderid = initialFolderId ? initialFolderId : firstFolderId;
+  const foldercategories = (await getFolderCategories(folderid)) as CardData[];
+  const categories = (await getCategories()) as CardData[];
 
   return (
     <>
-      <SearchComponent id={folderid} />
-      <CreateCatBtn />
-      <div className="mx-auto  sm:w-[600px]  w-[350px] lg:w-[800px] mt-5 border-4 rounded-xl border-[#852E2C] p-5">
-        <FolderActions folders={folders} />
-        <FolderCat id={folderid} />
-      </div>
-      <Categories />
-
-      <AddnewCategory folder={false} folderid="" />
+      <ParentClientComponent
+        foldercategories={foldercategories}
+        folderid={folderid}
+        categories={categories}
+        folders={folders}
+      />
     </>
   );
 };

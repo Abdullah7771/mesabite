@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import React, { useContext, useEffect, useRef, useState } from "react";
-inter
+inter;
 import { CardData } from "../../../types";
 
 import {
@@ -22,14 +22,15 @@ import {
 import Buttons from "../../../utils/Buttons";
 import { getSpecificCategory } from "../../../services/card-service";
 import { useSearchParams } from "next/navigation";
-import { inter,myFont } from "../../../fonts";
-
+import { inter, myFont } from "../../../fonts";
+import { collection, updateDoc, doc } from "firebase/firestore";
+import { db } from "../../../services/firebase-config";
 
 const EditCategory = () => {
   const searchParams = useSearchParams();
 
   const id = String(searchParams.get("id"));
-  const folderid =String(searchParams.get("folderid"))
+  const folderid = String(searchParams.get("folderid"));
 
   console.log(id, folderid);
 
@@ -52,16 +53,13 @@ const EditCategory = () => {
       folderid
     )) as CardData[];
     console.log(data);
-    
+
     setVal(data[0].title);
     setDesc(data[0].description);
     setImg(data[0].image);
     setLastImg(data[0].image);
-    setName(data[0].imgName);
-    // if (data) setVal(data.title);
-    // setDesc(data.description);
-    // setImg(data.image);
-    // setName(data.imgName);
+
+
   };
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,16 +70,7 @@ const EditCategory = () => {
       setName(imageUrl.name);
       setImg(imageUrl);
 
-      // try {
-      //   if (imageUrl) {
-      //     const storageRef =  ref(storage, `images/${img?.name}`);
-      //     const res = await uploadBytes(storageRef, imageUrl);
-      //     const downloadUrl = await getDownloadURL(storageRef);
-      //     console.log(downloadUrl);
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      // }
+    
     }
   };
 
@@ -94,7 +83,7 @@ const EditCategory = () => {
         if (img) {
           console.log(img);
 
-          if (folderid == 'null') {
+          if (folderid == "null") {
             const existingFilePath = `categories/${id}`;
 
             // Create a reference to the existing file
@@ -110,6 +99,12 @@ const EditCategory = () => {
 
             // Get the download URL for the new file
             const newDownloadUrl = await getDownloadURL(newFileRef);
+            const collectionRef = collection(db, "categories");
+
+            await updateDoc(doc(collectionRef, id), {
+              image: newDownloadUrl,
+            });
+            return newDownloadUrl;
           } else {
             const existingFilePath = `images/${folderid}/${id}`;
 
@@ -123,6 +118,15 @@ const EditCategory = () => {
             const result = await uploadBytes(newFileRef, img);
 
             const newDownloadUrl = await getDownloadURL(newFileRef);
+            const collectionRef = collection(db, "folders");
+            const getFolder = doc(collectionRef, folderid);
+
+            const nestedCollectionRef = collection(getFolder, "categories");
+
+            await updateDoc(doc(nestedCollectionRef, id), {
+              image: newDownloadUrl,
+            });
+            return newDownloadUrl;
 
             console.log(newDownloadUrl);
           }
@@ -265,7 +269,7 @@ const EditCategory = () => {
               image={img === lastImg ? img : name}
               handleSubmit={handleSubmit}
               task="edit"
-              folder={folderid !='null' }
+              folder={folderid != "null"}
               folderid={folderid}
             />
           </div>

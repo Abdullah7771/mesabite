@@ -23,10 +23,10 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
     quantity: props.quantity,
     image: props.image,
     id: props.id,
-    imgName: props.imgName,
   };
 
   const addCards = async () => {
+    console.log(cardData);
     if (!cardData.image || !cardData.title) {
       console.log(cardData);
       toast.error("Input all details");
@@ -39,14 +39,12 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
       folder
     );
     if (ab) {
-      handleSubmit(ab);
+      const url = await handleSubmit(ab, props.folderid);
+
+      router.push("/home");
     }
 
     console.log(ab);
-    setTimeout(() => {
-      router.refresh();
-    }, 1000);
-    router.push("/home");
   };
 
   const updateCards = async () => {
@@ -54,14 +52,15 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
       toast.error("Input img");
       return false;
     }
-    if (props.folderid)
-      await updateFolderCategories(cardData, props.folderid, folder);
 
-    handleSubmit(cardData.id);
-    setTimeout(() => {
-      router.refresh();
-    }, 1000);
-    router.push("/home");
+    await updateFolderCategories(cardData, props.folderid, folder);
+
+    await handleSubmit(cardData.id);
+    setTimeout(()=>{
+      
+      router.push("/home");
+    },200)
+
   };
 
   return (

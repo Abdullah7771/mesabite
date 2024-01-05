@@ -25,9 +25,7 @@ const FoldersDropdown = ({
       console.log(key);
 
       router.push("/home" + "?" + createQueryString(key, value));
-      setTimeout(() => {
-        router.refresh();
-      }, 1000);
+  
       // await getFolderCategories(key);
       setDropdown(false);
     } catch (error) {

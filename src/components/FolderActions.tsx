@@ -29,6 +29,9 @@ const FolderActions = ({ folders }: Folderprops) => {
 
   const delFolder = async (folderid: string) => {
     const del = await deleteFolder(folderid);
+    setTimeout(() => {
+      router.refresh();
+    }, 1000);
   };
 
   return (

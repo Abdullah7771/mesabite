@@ -14,6 +14,7 @@ const AddnewCategory = ({
 }) => {
   const searchParams = useSearchParams();
 
+
   const search = String(searchParams.get("folderid"));
   // const query2 = `/add-new-category?folder=${folder}&folderid=${folderid}`;
 

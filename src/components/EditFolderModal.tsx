@@ -46,7 +46,9 @@ const EditFolderModal = ({ setOpen, folderid }: Props) => {
           <button
             onClick={() => {
               editFolder(folderid, val);
-            
+              setTimeout(() => {
+                router.refresh();
+              }, 1000);
               setOpen(false)
             }}
             className="bg-[#FFCD00] text-[#852E2C] font-bold w-[150px] h-[50px] mt-2 rounded-full"

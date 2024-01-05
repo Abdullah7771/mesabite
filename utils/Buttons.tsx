@@ -43,7 +43,9 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
     }
 
     console.log(ab);
-
+    setTimeout(() => {
+      router.refresh();
+    }, 1000);
     router.push("/home");
   };
 
@@ -56,7 +58,9 @@ const Buttons = ({ handleSubmit, task, folder, ...props }: ButtonProps) => {
       await updateFolderCategories(cardData, props.folderid, folder);
 
     handleSubmit(cardData.id);
-
+    setTimeout(() => {
+      router.refresh();
+    }, 1000);
     router.push("/home");
   };
 

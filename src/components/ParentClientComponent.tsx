@@ -38,7 +38,7 @@ const ParentClientComponent = ({
  
   return (
     <>
-      <CardContext.Provider
+    <CardContext.Provider
         value={{
           cat,
           setCat,
@@ -57,7 +57,10 @@ const ParentClientComponent = ({
           <AddnewCategory folder={true} folderid={folderid} />
         </div>
         <Categories />
+        <div className="mx-auto  sm:w-[600px]  w-[350px] lg:w-[800px]  border-4 rounded-xl border-white mt-5  p-5">
         <AddnewCategory folder={false} />
+
+        </div>
       </CardContext.Provider>
     </>
   );

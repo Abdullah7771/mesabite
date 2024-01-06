@@ -75,6 +75,7 @@ const FoldersDropdown = ({
         <FontAwesomeIcon
           icon={faBars}
           size="xl"
+          color="#852E2C"
           onClick={() => {
             handleClick();
           }}

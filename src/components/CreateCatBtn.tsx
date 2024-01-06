@@ -8,7 +8,7 @@ const CreateCatBtn = () => {
   return (
     <>
       <div
-        className="flex gap-2 cursor-pointer mt-4 w-fit mx-auto"
+        className="flex gap-2 cursor-pointer mt-4 mx-auto  sm:w-[600px]  w-[350px] lg:w-[800px]"
         onClick={() => router.push("/add-new-folder")}
       >
         <CiCirclePlus className="text-4xl text-[#852E2C]" />

@@ -25,7 +25,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
   };
 
   return (
-    <div className="  ">
+    <div className="mt-2 flex justify-center items-center  ">
       <p
         className={`mt-5 ml-2 text-base font-semibold ${montserrat.className}`}
       >

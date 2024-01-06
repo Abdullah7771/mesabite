@@ -25,7 +25,7 @@ const AddnewCategory = ({
   return (
     <>
       <Link href={query}>
-        <div className="ml-[20%]">
+        <div >
           <ImageModal
             element={
               <CiCirclePlus className=" mx-auto text-[100px] text-[#852E2C]" />
@@ -34,7 +34,7 @@ const AddnewCategory = ({
             text={`Add New Category To Your Menu`}
             textsize="text-sm sm:text-lg px-6 pr-8 font-bold"
             icon={faCirclePlus}
-            styles="h-[240px]  sm:w-[320px] sm:h-[260px] sm:ml-[5%] md:w-[378px] md:h-[308px] lg:w-[435px] lg:h-[355px]  w-full"
+            styles="w-full h-[241px] sm:w-[320px] sm:h-[260px] sm:ml-[5%] md:w-[378px] md:h-[308px] lg:w-[435px] lg:h-[353px]"
           />
         </div>
       </Link>

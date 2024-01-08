@@ -59,12 +59,43 @@ const NewFolder = () => {
           styles="bg-[url('/inputshape.png')] lg:w-[415px] lg:h-[70px] lg:ml-[8%] md:w-[368px] md:h-[52px] lg:pb-7  sm:w-[320px] sm:ml-[6%]   w-full  bg-contain bg-no-repeat p-2 "
         />
         <br /> <br />
-        <ImageModal
-          icon={faArrowUpFromBracket}
-          textsize="text-md sm:text-lg font-bold px-2 mt-8"
-          sizes="5x"
-          styles="  mt-2 pt-5 bg-no-repeat bg-contain w-full md:w-[375px] md:h-[307px]  lg:w-[435px] lg:h-[355px] mx-auto sm:ml-[5%] h-[253px] sm:h-[277px] flex  "
-        />
+        <div>
+          <p className={`mt-5 ml-2 text-base font-semibold ${inter.className}`}>
+            Image (Optional)
+          </p>
+          <div
+            className={`h-[253px] mx-auto  sm:w-[320px] sm:h-[260px]  md:w-[378px] md:h-[308px] lg:w-[361px] lg:h-[295px]  w-full flex justify-center items-center bg-no-repeat bg-cover`}
+            style={{
+              backgroundImage: `url("/imgshape2.png")`,
+            }}
+          >
+            <div className="cursor-pointer text-center">
+              <FontAwesomeIcon
+                icon={faArrowUpFromBracket}
+                size={"4x"}
+                color="#852E2C"
+              />
+
+              <p
+                className={
+                  inter.className +
+                  ` font-semiboldtext-lg mt-8 pr-2 text-[#852E2C]`
+                }
+              >
+                {"Click here to upload an image"}
+              </p>
+
+              <input
+                type="file"
+                id="img"
+                name="img"
+                accept="image/*"
+                className="ml-[15%] mt-3"
+                hidden={true}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="bg-[#FFF6DF]   ">
